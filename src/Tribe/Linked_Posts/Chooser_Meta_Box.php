@@ -192,16 +192,26 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 	 */
 	protected function edit_post_link( $linked_post_id ) {
 		$linked_post_pto = get_post_type_object( $this->post_type );
-		$cannot_edit_others_posts = (
-			empty( $linked_post_pto->cap->edit_others_posts )
-			|| ! current_user_can( $linked_post_pto->cap->edit_others_posts )
-		);
+		$required_cap    = $linked_post_pto->cap->edit_others_posts;
 
-		if ( is_admin() && $cannot_edit_others_posts ) {
+		// If no capability returns for the post, bail.
+		if ( empty( $required_cap ) ) {
+			return;
+		}
+
+		$can_edit_others_posts = current_user_can( $linked_post_pto->cap->edit_others_posts );
+
+		// If you're on the dashboard, and are unable to edit other posts, bail.
+		if ( is_admin() && ! $can_edit_others_posts ) {
 			return;
 		}
 
 		$edit_link = get_edit_post_link( $linked_post_id );
+
+		// If the edit_link is null, bail.
+		if ( empty( $edit_link ) ) {
+			return;
+		}
 
 		printf(
 			'<div class="edit-linked-post-link"><a style="%1$s"  href="%2$s" target="_blank">%3$s</a></div>',
