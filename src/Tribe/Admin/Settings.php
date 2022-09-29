@@ -19,6 +19,8 @@ class Settings {
 	 */
 	public static $settings_page_id = 'tec-events-settings';
 
+	public $wpsf;
+
 	/**
 	 * Settings tabs
 	 */
@@ -149,6 +151,16 @@ class Settings {
 		return $menu_slug;
 	}
 
+	public function setup_wpsf() {
+		// Include and create a new WordPressSettingsFramework
+		require_once( \Tribe__Main::instance()->plugin_path . 'vendor/iconicwp/wordpress-settings-framework/wp-settings-framework.php' );
+
+		$this->wpsf = new \WordPressSettingsFramework(
+			null,
+			'tec_events'
+		);
+	}
+
 	/**
 	 * Adds the menu and pages for The Events Calendar.
 	 *
@@ -159,18 +171,12 @@ class Settings {
 
 		$this->maybe_register_events_menu();
 
-		$admin_pages->register_page(
-			[
-				'id'       => static::$settings_page_id,
-				'parent'   => $this->get_tec_events_menu_slug(),
-				'title'    => esc_html__( 'Settings', 'the-events-calendar' ),
-				'path'     => static::$settings_page_id,
-				'callback' => [
-					tribe( 'settings' ),
-					'generatePage',
-				],
-			]
-		);
+		$this->wpsf->add_settings_page( [
+			'parent_slug' => $this->get_tec_events_menu_slug(),
+			'page_title'  => esc_html__( 'Settings', 'the-events-calendar' ),
+			'menu_title'  => esc_html__( 'Settings', 'the-events-calendar' ),
+			'capability'  => 'install_plugins',
+		] );
 
 		$admin_pages->register_page(
 			[
