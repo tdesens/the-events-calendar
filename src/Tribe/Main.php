@@ -741,6 +741,12 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		protected function addHooks() {
 
 			add_action( 'parse_query', [ Tribe__Events__Query::class, 'parse_query' ], 50 );
+
+			$pre_get_posts = apply_filters( 'tec_toggle_pre_get_posts', false );
+			if ( ! empty( $pre_get_posts ) ) {
+				add_action( 'pre_get_posts', [ Tribe__Events__Query::class, 'pre_get_posts' ], 50 );
+			}
+
 			/**
 			 * It's important that anything related to Text Domain happens at `init`
 			 * because of the way $wp_locale works
