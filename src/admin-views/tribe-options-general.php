@@ -1,5 +1,7 @@
 <?php
 
+use PDb_shortcodes\attributes;
+
 $tec              = Tribe__Events__Main::instance();
 $site_time_format = get_option( 'time_format' );
 
@@ -21,7 +23,10 @@ $general_behavior_section = [
 		'html' => '<h3>' . esc_html__( 'General Behaviors', 'the-events-calendar' ) . '</h3>',
 	],
 	'posts-per-page'                  => [
-		'type'            => 'text',
+		'type'            => 'number',
+		'attributes'      => [
+			'min' => 0
+		],
 		'tooltip'         => $posts_per_page_tooltip,
 		'size'            => 'small',
 		'default'         => tribe_events_views_v2_is_enabled() ? 12 : get_option( 'posts_per_page' ),
@@ -94,10 +99,6 @@ $general_location_section = [
 		'default'         => 'event',
 		'validation_type' => 'slug',
 		'conditional'     => ( '' != get_option( 'permalink_structure' ) ),
-	],
-	'view-calendar-link'            => [
-		'type' => 'html',
-		'html' => '<p class="tribe-field-indent">' . esc_html__( 'Where\'s my calendar?', 'the-events-calendar' ) . ' <a href="' . esc_url( tribe( 'tec.main' )->getLink() ) . '">' . esc_html__( 'Right here', 'the-events-calendar' ) . '</a>.</p>',
 	],
 	'ical-info'                     => [
 		'type'             => 'html',
@@ -271,12 +272,27 @@ $cleanup_section = [
 			36   => esc_html__( '3 years', 'the-events-calendar' ),
 		],
 	],
+	'debugEvents' => [
+		'type'            => 'checkbox_bool',
+		'tooltip'         => sprintf(
+			esc_html__(
+				'Enable this option to log debug information. By default this will log to your server PHP error log. If you\'d like to see the log messages in your browser, then we recommend that you install the %s and look for the "Tribe" tab in the debug output.',
+				'tribe-common'
+			),
+			'<a target="_blank" rel="noopener noreferrer" href="https://wordpress.org/extend/plugins/debug-bar/">' . esc_html__( 'Debug Bar Plugin', 'tribe-common' ) . '</a>'
+		),
+		'default'         => false,
+		'validation_type' => 'boolean',
+		'conditional'     => is_super_admin(),
+
+	],
 	'tec-general-cleanup-section-end' => [
 		'type' => 'html',
 		'html' => '</section>',
 	]
 ];
 
+// Avengers Assemble!
 $general_tab_fields = $general_behavior_section + $general_location_section + $event_creation_section + $recurring_events_section + $cleanup_section;
 
 $general_tab_fields = Tribe__Main::array_insert_after_key(
@@ -284,34 +300,6 @@ $general_tab_fields = Tribe__Main::array_insert_after_key(
 	$generalTabFields,
 	$general_tab_fields
 );
-
-/*
-if ( is_super_admin() ) {
-	$debug_control = [
-		'debugEvents' => [
-			'type'            => 'checkbox_bool',
-			'label'           => esc_html__( 'Debug mode', 'tribe-common' ),
-			'tooltip' => sprintf(
-				esc_html__(
-					'Enable this option to log debug information. By default this will log to your server PHP error log. If you\'d like to see the log messages in your browser, then we recommend that you install the %s and look for the "Tribe" tab in the debug output.',
-					'tribe-common'
-				),
-				'<a target="_blank" rel="noopener noreferrer" href="https://wordpress.org/extend/plugins/debug-bar/">' . esc_html__( 'Debug Bar Plugin', 'tribe-common' ) . '</a>'
-			),
-			'default'         => false,
-			'validation_type' => 'boolean',
-		]
-	];
-
-	$general_tab_fields = Tribe__Main::array_insert_after_key(
-		'tribe-form-content-end',
-		$general_tab_fields,
-		$debug_control,
-	);
-}
-*/
-
-$general_tab_fields = tribe( 'events.editor.compatibility' )->insert_toggle_blocks_editor_field( $general_tab_fields );
 
 $general_tab_fields = apply_filters( 'tribe-event-general-settings-fields', $general_tab_fields );
 
