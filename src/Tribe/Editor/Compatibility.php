@@ -137,11 +137,19 @@ class Tribe__Events__Editor__Compatibility {
 		$read_more_url  = 'https://theeventscalendar.com/gutenberg-block-editor-news/?utm_source=tec&utm_medium=eventscalendarapp&utm_term=adminnotice&utm_campaign=gutenbergrelease&utm_content=ebook-gutenberg&cid=tec_eventscalendarapp_adminnotice_gutenbergrelease_ebook-gutenberg';
 		$read_more_link = sprintf( ' <a href="%2$s" target="_blank">%1$s</a>.', esc_html__( 'Read more', 'the-events-calendar' ), esc_url( $read_more_url ) );
 
-		$insert_before = 'showComments';
-		$insert_data = [
+		$insert_after = 'tec-general-event-creation-section-end';
+
+		$block_editor_section = [
+			'tec-general-block-editor-section-start' => [
+				'type' => 'html',
+				'html' => '<section id=tec-general-settings-block-editor-section>',
+			],
+			'tec-general-block-editor-section-title'  => [
+				'type' => 'html',
+				'html' => '<h3>' . esc_html__( 'WordPress Block Editor', 'the-events-calendar' ) . '</h3>',
+			],
 			static::$blocks_editor_key        => [
 				'type'            => 'checkbox_bool',
-				'label'           => esc_html__( 'Activate Block Editor for Events', 'the-events-calendar' ),
 				'tooltip'         => esc_html__( 'Enable the Gutenberg block editor interface for creating events.', 'the-events-calendar' ) . $read_more_link,
 				'default'         => false,
 				'validation_type' => 'boolean',
@@ -149,14 +157,18 @@ class Tribe__Events__Editor__Compatibility {
 			],
 			static::$blocks_editor_hidden_field_key => [
 				'type'            => 'checkbox_bool',
-				'label'           => esc_html__( 'Hidden Blocks Editor Config', 'the-events-calendar' ),
+				'class'           => 'tribe-common-a11y-hidden hidden',
 				'default'         => false,
 				'validation_type' => 'boolean',
 				'attributes'      => [ 'id' => 'tribe-blocks-editor-toggle-hidden-field' ],
 			],
+			'tec-general-block-editor-section-end' => [
+				'type' => 'html',
+				'html' => '</section>',
+			]
 		];
 
-		return Tribe__Main::array_insert_before_key( $insert_before, $fields, $insert_data );
+		return Tribe__Main::array_insert_after_key( $insert_after, $fields, $block_editor_section );
 	}
 
 	/* DEPRECATED */

@@ -385,6 +385,7 @@ class Tribe__Events__Assets {
 			|| tribe_is_event_organizer()
 			|| tribe_is_event_venue()
 			|| ( $post instanceof WP_Post && has_shortcode( $post->post_content, 'tribe_events' ) )
+			|| tribe_is_sett
 		);
 
 		/**

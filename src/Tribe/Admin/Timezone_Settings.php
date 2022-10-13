@@ -41,7 +41,7 @@ class Tribe__Events__Admin__Timezone_Settings {
 
 		// Add the new section just before the settings form is closed
 		return Tribe__Main::array_insert_before_key(
-			'tribe-form-content-end',
+			'tec-general-cleanup-section-start',
 			$general_settings,
 			$timezone_settings
 		);

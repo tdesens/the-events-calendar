@@ -33,6 +33,8 @@ jQuery( function( $ ) {
 		var $field = $container.find( '#tribe-blocks-editor-toggle-field' );
 		var $hiddenField = $hiddenContainer.find( '#tribe-blocks-editor-toggle-hidden-field' );
 
+		$hiddenContainer.hide();
+
 		var isFieldChecked = $field.is( ':checked' );
 		var isHiddenFieldChecked = $hiddenField.is( ':checked' );
 

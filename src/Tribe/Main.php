@@ -3773,7 +3773,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		 *
 		 * @return array
 		 */
-		public function general_settings_tab_fields( $general_tab_fields ) {
+		public function general_settings_tab_fields( $generalTabFields ) {
 			require_once $this->plugin_path . 'src/admin-views/tribe-options-general.php';
 
 			return $general_tab_fields;

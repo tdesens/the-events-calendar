@@ -35,7 +35,6 @@ return [
 	],
 	'tribe_events_timezone_mode'       => [
 		'type'            => 'dropdown',
-		'label'           => esc_html__( 'Time zone mode', 'the-events-calendar' ),
 		'validation_type' => 'options',
 		'size'            => 'large',
 		'options'         => [
@@ -45,7 +44,6 @@ return [
 	],
 	'tribe_events_timezones_show_zone' => [
 		'type'            => 'checkbox_bool',
-		'label'           => esc_html__( 'Show time zone', 'the-events-calendar' ),
 		'tooltip'         => esc_html__(
 			'Appends the time zone to the end of event scheduling information &ndash; this can be useful when you have events in numerous different time zones.',
 			'the-events-calendar'
