@@ -7,13 +7,17 @@ import { uniq } from 'lodash';
  * Internal dependencies
  */
 import * as types from './../types';
+import { editorDefaults } from '@moderntribe/common/utils/globals';
 
 export const DEFAULT_STATE = [];
 
 export const setInitialState = ( data ) => {
 	const { meta } = data;
+
+	const defaultOrganizer = editorDefaults().organizer ? editorDefaults().organizer : 0;
+
 	if ( meta.hasOwnProperty( '_EventOrganizerID' ) ) {
-		DEFAULT_STATE.push( ...meta._EventOrganizerID );
+		meta[ '_EventOrganizerID' ] = defaultOrganizer;
 	}
 };
 
