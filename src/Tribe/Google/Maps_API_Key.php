@@ -63,29 +63,63 @@ class Tribe__Events__Google__Maps_API_Key {
 		$gmaps_api_fields = [
 			'gmaps-js-api-start' => [
 				'type' => 'html',
-				'html' => '<h3>' . esc_html__( 'Google Maps API', 'the-events-calendar' ) . '</h3>',
+				'html' => '<section class="tec-settings-grid tec-settings-grid__3-col">',
 			],
-
-			'gmaps-js-api-info-box' => [
+				'gmaps-js-api-title' => [
+					'type' => 'html',
+					'html' => '<h3 class="tec-settings-grid tec-settings-grid__header">Maps Integration</h3>',
+				],
+				'gmaps-js-api-desc_start' => [
+					'type' => 'html',
+					'html' => '<div class="tec-settings-grid tec-settings-grid__description">',
+				],
+					'gmaps-js-api-desc_1' => [
+						'type' => 'html',
+						'html' => '<p>Some descriptive text</p>',
+					],
+					'gmaps-js-api-desc_2' => [
+						'type' => 'html',
+						'html' => '<p>Sed posuere consectetur est at lobortis. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Maecenas sed diam eget risus varius blandit sit amet non magna. Nullam id dolor id nibh ultricies vehicula ut id elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>',
+					],
+				'gmaps-js-api-desc_end' => [
+					'type' => 'html',
+					'html' => '</div>',
+				],
+				'gmaps-js-card-start'        => [
+					'type' => 'html',
+					'html' => '<div class="tec-settings-card">',
+				],
+					'gmaps-js-api-card-title' => [
+						'type' => 'html',
+						'html' => '<h3 class="tec-settings-card__header">' . esc_html__( 'Google Maps API', 'the-events-calendar' ) . '</h3>',
+					],
+					'gmaps-js-api-info-box' => [
+						'type' => 'html',
+						'html' => '<p>' . sprintf(
+								__(
+									'The Events Calendar comes with an API key for basic maps functionality. If you’d like to use more advanced features like custom map pins or dynamic map loads, you’ll need to get your own %1$s. %2$s.',
+									'the-events-calendar'
+								),
+								'<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Google Maps API key', 'the-events-calendar' ) . '</a>',
+								'<a href="https://theeventscalendar.com/knowledgebase/setting-up-your-google-maps-api-key/" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Read more', 'the-events-calendar' ) . '</a>'
+							) . '</p>',
+					],
+					self::$api_key_option_name => [
+						'type'            => 'text',
+						'label'           => esc_html__( 'Google Maps API key', 'the-events-calendar' ),
+						'tooltip'         => $tooltip,
+						'size'            => 'medium',
+						'validation_type' => 'alpha_numeric_with_dashes_and_underscores',
+						'can_be_empty'    => true,
+						'parent_option'   => Tribe__Events__Main::OPTIONNAME,
+					],
+				'gmaps-js-card-end'        => [
+					'type' => 'html',
+					'html' => '</div>',
+				],
+			'gmaps-js-api-end' => [
 				'type' => 'html',
-				'html' => '<p>' . sprintf(
-						__(
-							'The Events Calendar comes with an API key for basic maps functionality. If you’d like to use more advanced features like custom map pins or dynamic map loads, you’ll need to get your own %1$s. %2$s.',
-							'the-events-calendar'
-						),
-						'<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Google Maps API key', 'the-events-calendar' ) . '</a>',
-						'<a href="https://theeventscalendar.com/knowledgebase/setting-up-your-google-maps-api-key/" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Read more', 'the-events-calendar' ) . '</a>'
-					) . '</p>',
-			],
-
-			self::$api_key_option_name => [
-				'type'            => 'text',
-				'label'           => esc_html__( 'Google Maps API key', 'the-events-calendar' ),
-				'tooltip'         => $tooltip,
-				'size'            => 'medium',
-				'validation_type' => 'alpha_numeric_with_dashes_and_underscores',
-				'can_be_empty'    => true,
-				'parent_option'   => Tribe__Events__Main::OPTIONNAME,
+				'html' => '</section>',
 			],
 		];
 

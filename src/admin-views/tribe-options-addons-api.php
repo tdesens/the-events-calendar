@@ -5,10 +5,54 @@
  */
 $internal = [];
 
-$current_url = tribe( 'tec.main' )->settings()->get_url( [ 'tab' => 'addons' ] );
+$current_url      = tribe( 'tec.main' )->settings()->get_url( [ 'tab'    => 'addons' ] );
+$do_meetup        = get_option( 'pue_install_key_event_aggregator' );
+$do_ebt           = class_exists( 'Tribe__Events__Tickets__Eventbrite__Main' );
+$do_aggregator    = $do_meetup || $do_ebt;
+$ag_wrapper_start = [];
+$ag_wrapper_end   = [];
+
+if ( $do_aggregator ) {
+	$ag_wrapper_start = [
+		'aggregator-start' => [
+			'type' => 'html',
+			'html' => '<section class="tec-settings-grid tec-settings-grid__3-col">',
+		],
+		'aggregator-title' => [
+			'type' => 'html',
+			'html' => '<h3 class="tec-settings-grid tec-settings-grid__header">Event aggregator</h3>',
+		],
+		'aggregator-desc-start' => [
+			'type' => 'html',
+			'html' => '<div class="tec-settings-grid tec-settings-grid__description">',
+		],
+		'aggregator-desc-1' => [
+			'type' => 'html',
+			'html' => '<p>Some descriptive text</p>',
+		],
+		'aggregator-desc-2' => [
+			'type' => 'html',
+			'html' => '<p>Sed posuere consectetur est at lobortis. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Maecenas sed diam eget risus varius blandit sit amet non magna. Nullam id dolor id nibh ultricies vehicula ut id elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>',
+		],
+		'aggregator-desc-end' => [
+			'type' => 'html',
+			'html' => '</div>',
+		],
+	];
+	$ag_wrapper_end   = [
+		'aggregator_end' => [
+			'type' => 'html',
+			'html' => '</section>',
+		]
+	];
+}
+
+if ( $do_aggregator ) {
+	$internal = array_merge( $ag_wrapper_start, $internal );
+}
 
 // if there's an Event Aggregator license key, add the Meetup.com API fields
-if ( get_option( 'pue_install_key_event_aggregator' ) ) {
+if ( $do_meetup ) {
 
 	$missing_meetup_credentials = ! tribe( 'events-aggregator.settings' )->is_ea_authorized_for_meetup();
 
@@ -42,7 +86,11 @@ if ( get_option( 'pue_install_key_event_aggregator' ) ) {
 	$internal_meetup = [
 		'meetup-start'        => [
 			'type' => 'html',
-			'html' => '<h3>' . esc_html__( 'Meetup', 'the-events-calendar' ) . '</h3>',
+			'html' => '<div class="tec-settings-card">',
+		],
+		'meetup-title'        => [
+			'type' => 'html',
+			'html' => '<h3 class="tec-settings-card__header">' . esc_html__( 'Meetup', 'the-events-calendar' ) . '</h3>',
 		],
 		'meetup-info-box'     => [
 			'type' => 'html',
@@ -51,6 +99,10 @@ if ( get_option( 'pue_install_key_event_aggregator' ) ) {
 		'meetup_token_button' => [
 			'type' => 'html',
 			'html' => $meetup_token_html,
+		],
+		'meetup-end'        => [
+			'type' => 'html',
+			'html' => '</div>',
 		],
 	];
 
@@ -61,7 +113,7 @@ if ( get_option( 'pue_install_key_event_aggregator' ) ) {
 /**
  * Show Eventbrite API Connection only if Eventbrite Plugin is Active or Event Aggregator license key has a license key
  */
-if ( class_exists( 'Tribe__Events__Tickets__Eventbrite__Main' ) || get_option( 'pue_install_key_event_aggregator' ) ) {
+if ( $do_aggregator ) {
 
 	$missing_eb_credentials = ! tribe( 'events-aggregator.settings' )->is_ea_authorized_for_eb();
 
@@ -91,10 +143,14 @@ if ( class_exists( 'Tribe__Events__Tickets__Eventbrite__Main' ) || get_option( '
 	<?php
 	$eventbrite_token_html = ob_get_clean();
 
-	$internal2 = [
+	$internal_eb = [
 		'eb-start'        => [
 			'type' => 'html',
-			'html' => '<h3>' . esc_html__( 'Eventbrite', 'the-events-calendar' ) . '</h3>',
+			'html' => '<div class="tec-settings-card">',
+		],
+		'eb-title'        => [
+			'type' => 'html',
+			'html' => '<h3 class="tec-settings-card__header">' . esc_html__( 'Eventbrite', 'the-events-calendar' ) . '</h3>',
 		],
 		'eb-info-box'     => [
 			'type' => 'html',
@@ -104,9 +160,17 @@ if ( class_exists( 'Tribe__Events__Tickets__Eventbrite__Main' ) || get_option( '
 			'type' => 'html',
 			'html' => $eventbrite_token_html,
 		],
+		'eb-end'        => [
+			'type' => 'html',
+			'html' => '</div>',
+		],
 	];
 
-	$internal = array_merge( $internal, $internal2 );
+	$internal = array_merge( $internal, $internal_eb );
+}
+
+if ( $do_aggregator ) {
+	$internal = array_merge( $internal, $ag_wrapper_end );
 }
 
 $internal = apply_filters( 'tribe_addons_tab_fields', $internal );
