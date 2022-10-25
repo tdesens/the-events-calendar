@@ -16,8 +16,8 @@ export const setInitialState = ( data ) => {
 
 	const defaultOrganizer = editorDefaults().organizer ? editorDefaults().organizer : 0;
 
-	if ( meta.hasOwnProperty( '_EventOrganizerID' ) ) {
-		meta[ '_EventOrganizerID' ] = defaultOrganizer;
+	if ( ! meta.hasOwnProperty( '_EventOrganizerID' ) ) {
+		meta[ '_EventOrganizerID' ] = [ defaultOrganizer ];
 	}
 };
 
