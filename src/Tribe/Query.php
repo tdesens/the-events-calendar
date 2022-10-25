@@ -456,7 +456,7 @@ class Tribe__Events__Query {
 	 * Provided a query for Events, the method will set the query variables up to filter
 	 * and order Events by start and end date.
 	 *
-	 * @since TBD
+	 * @since 6.0.2
 	 *
 	 * @param WP_Query $query The query object to modify.
 	 *
@@ -464,6 +464,11 @@ class Tribe__Events__Query {
 	 */
 	public static function filter_and_order_by_date( $query ) {
 		if ( ! $query instanceof WP_Query ) {
+			return;
+		}
+
+		if ( (array) $query->get( 'post_type' ) !== [ TEC::POSTTYPE ] ) {
+			// Not an Event only query.
 			return;
 		}
 
@@ -491,7 +496,7 @@ class Tribe__Events__Query {
 		 * Filters the value that will be used to indicate the current moment in an
 		 * Event query. The query will return Events ending after the current moment.
 		 *
-		 * @since TBD
+		 * @since 6.0.2
 		 *
 		 * @param string|int|DateTimeInterface $current_moment The current moment, defaults to `now`.
 		 * @param WP_Query                     $query          The query object being filtered.
