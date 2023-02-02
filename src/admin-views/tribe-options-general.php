@@ -134,7 +134,7 @@ $general_tab_fields = [
 $tec_events_general_toc = [
 	'tec-settings-general-toc-nav-start'       => [
 		'type' => 'html',
-		'html' => '<div class="tec-settings-header">',
+		'html' => '<div class="tec-settings-header tec-settings__toc">',
 	],
 	'tec-settings-general-toc-start'           => [
 		'type' => 'html',
@@ -159,6 +159,10 @@ $tec_events_general_toc = [
 	'tec-settings-general-toc-debugging' => [
 		'type' => 'html',
 		'html' => '<li><a href="#tec-settings-general-debugging">' . _x( 'Debugging', 'Debugging table of contents link.', 'the-events-calendar' ) . '</a>',
+	],
+	'tec-events-settings-display-toc-submit' => [
+		'type' => 'html',
+		'html' => '<li class="tec-settings-toc-submit"><input id="tecSaveSettings" class="button-primary" type="submit" name="tribeSaveSettings" value="Save Changes" ></li>',
 	],
 	'tec-settings-general-toc-end'             => [
 		'type' => 'html',

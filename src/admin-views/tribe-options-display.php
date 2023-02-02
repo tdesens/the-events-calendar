@@ -61,7 +61,7 @@ $tec_events_display_fields = [
 $tec_events_general_toc = [
 	'tec-events-settings-display-toc-nav-start'             => [
 		'type' => 'html',
-		'html' => '<div class="tec-settings-header">',
+		'html' => '<div class="tec-settings-header tec-settings__toc">',
 	],
 	'tec-events-settings-display-toc-start'           => [
 		'type' => 'html',
@@ -90,6 +90,10 @@ $tec_events_general_toc = [
 	'tec-events-settings-display-toc-additional' => [
 		'type' => 'html',
 		'html' => '<li><a href="#tec-settings-events-settings-display-additional">' . _x( 'Additional Content', 'Additional Content table of contents link.', 'the-events-calendar' ) . '</a>',
+	],
+	'tec-events-settings-display-toc-submit' => [
+		'type' => 'html',
+		'html' => '<li class="tec-settings-toc-submit"><input id="tecSaveSettings" class="button-primary" type="submit" name="tribeSaveSettings" value="Save Changes" ></li>',
 	],
 	'tec-events-settings-display-toc-end'             => [
 		'type' => 'html',
