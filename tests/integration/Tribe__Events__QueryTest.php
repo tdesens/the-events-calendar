@@ -2,7 +2,7 @@
 
 use Spatie\Snapshots\MatchesSnapshots;
 use TEC\Events\Custom_Tables\V1\Provider as CT1_Provider;
-use Tribe\Events\Test\Traits\With_Uopz;
+use Tribe\Tests\Traits\With_Uopz;
 use Tribe\Events\Views\V2\Hooks;
 use Tribe__Events__Main as TEC;
 use Tribe__Date_Utils as Dates;
@@ -216,5 +216,28 @@ class Tribe__Events__QueryTest extends \Codeception\TestCase\WPTestCase {
 		$sql = $query->request;
 
 		$this->assertMatchesSnapshot( $sql );
+	}
+
+	/**
+	 * Tests our parse_query hook when wp_query is nulled.
+	 *
+	 * @test
+	 */
+	public function should_parse_query_with_null_global() {
+		// Create scenario where WP Query is nulled before parse_query will attempt to access it.
+		global $wp_query;
+		$query          = new WP_Query();
+		$query->is_home = true;
+		add_filter( "tribe_context_is_main_query", "__return_false" );
+		add_filter( "tribe_context_tec_post_type", "__return_false" );
+		add_action( 'parse_query', static function ( $query ) {
+			$query->is_home = true;
+		}, 1, 1 );
+		tribe_update_option( 'showEventsInMainLoop', true );
+		$wp_query = null;
+		$query->query( [
+			'post_type'                    => TEC::POSTTYPE,
+			'tribe_suppress_query_filters' => false,
+		] );
 	}
 }

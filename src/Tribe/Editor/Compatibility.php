@@ -31,6 +31,7 @@ class Tribe__Events__Editor__Compatibility {
 	 * Key for the Hidden Field of toggling blocks editor.
 	 *
 	 * @since 5.14.0
+	 * @deprecated 6.0.5
 	 *
 	 * @var string
 	 */
@@ -48,7 +49,7 @@ class Tribe__Events__Editor__Compatibility {
 	public function hook() {
 		add_filter( 'tribe_editor_should_load_blocks', [ $this, 'filter_tribe_editor_should_load_blocks' ], 100 );
 		add_filter( 'classic_editor_enabled_editors_for_post_type', [ $this, 'filter_classic_editor_enabled_editors_for_post_type' ], 10, 2 );
-		add_filter( 'tribe-event-general-settings-fields', [ $this, 'insert_toggle_blocks_editor_field' ] );
+		add_filter( 'tribe_general_settings_tab_fields', [ $this, 'insert_toggle_blocks_editor_field' ] );
 	}
 
 	/**
@@ -59,11 +60,11 @@ class Tribe__Events__Editor__Compatibility {
 	 * @return bool
 	 */
 	public function is_blocks_editor_toggled_on() {
-		$cache     = tribe( 'cache' );
+		$cache     = tribe_cache();
 		$cache_key = 'tec_editor_compatibility_' . static::$blocks_editor_key;
 
 		$is_on = $cache->get( $cache_key, '', null );
-		if ( $is_on !== null ) {
+		if ( $is_on !== '' && $is_on !== null ) {
 			return tribe_is_truthy( $is_on );
 		}
 
@@ -78,7 +79,7 @@ class Tribe__Events__Editor__Compatibility {
 		 */
 		$is_on = (bool) apply_filters( 'tribe_events_blocks_editor_is_on', $is_on );
 
-		$cache->set( $cache_key, $is_on, \Tribe__Cache::NON_PERSISTENT );
+		$cache->set( $cache_key, (int) $is_on, \Tribe__Cache::NON_PERSISTENT );
 
 		return tribe_is_truthy( $is_on );
 	}
@@ -130,7 +131,11 @@ class Tribe__Events__Editor__Compatibility {
 	 *
 	 * @return array<string,mixed>
 	 */
+<<<<<<< HEAD
 	public function insert_toggle_blocks_editor_field( array $fields ) : array {
+=======
+	public function insert_toggle_blocks_editor_field( $fields ) {
+>>>>>>> release/B23.bb8
 		if ( ! tribe( 'editor' )->is_wp_version() ) {
 			return $fields;
 		}
@@ -138,6 +143,7 @@ class Tribe__Events__Editor__Compatibility {
 		$read_more_url  = 'https://theeventscalendar.com/gutenberg-block-editor-news/?utm_source=tec&utm_medium=eventscalendarapp&utm_term=adminnotice&utm_campaign=gutenbergrelease&utm_content=ebook-gutenberg&cid=tec_eventscalendarapp_adminnotice_gutenbergrelease_ebook-gutenberg';
 		$read_more_link = sprintf( ' <a href="%2$s" target="_blank">%1$s</a>.', esc_html__( 'Read more', 'the-events-calendar' ), esc_url( $read_more_url ) );
 
+<<<<<<< HEAD
 		$insert_after = 'tec-general-event-creation-section-end';
 
 		$block_editor_section = [
@@ -149,6 +155,9 @@ class Tribe__Events__Editor__Compatibility {
 				'type' => 'html',
 				'html' => '<h3>' . esc_html__( 'WordPress Block Editor', 'the-events-calendar' ) . '</h3>',
 			],
+=======
+		$insert_data = [
+>>>>>>> release/B23.bb8
 			static::$blocks_editor_key        => [
 				'type'            => 'checkbox_bool',
 				'tooltip'         => esc_html__( 'Enable the Gutenberg block editor interface for creating events.', 'the-events-calendar' ) . $read_more_link,
@@ -156,6 +165,7 @@ class Tribe__Events__Editor__Compatibility {
 				'validation_type' => 'boolean',
 				'attributes'      => [ 'id' => 'tribe-blocks-editor-toggle-field' ],
 			],
+<<<<<<< HEAD
 			static::$blocks_editor_hidden_field_key => [
 				'type'            => 'checkbox_bool',
 				'class'           => 'tribe-common-a11y-hidden hidden',
@@ -170,6 +180,15 @@ class Tribe__Events__Editor__Compatibility {
 		];
 
 		return Tribe__Main::array_insert_after_key( $insert_after, $fields, $block_editor_section );
+=======
+		];
+
+		return Tribe__Main::array_insert_before_key(
+			'disable_metabox_custom_fields',
+			$fields,
+			$insert_data
+		);
+>>>>>>> release/B23.bb8
 	}
 
 	/* DEPRECATED */
