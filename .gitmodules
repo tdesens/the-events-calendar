@@ -3,10 +3,10 @@
 	url = https://github.com/mathiasbynens/jquery-placeholder.git
 [submodule "vendor/php-date-formatter"]
 	path = vendor/php-date-formatter
-	url = git://github.com/kartik-v/php-date-formatter
+	url = https://github.com/kartik-v/php-date-formatter.git
 [submodule "common"]
 	path = common
-	url = git@github.com:moderntribe/tribe-common.git
+	url = git@github.com:the-events-calendar/tribe-common.git
 [submodule "src/resources/postcss/utilities"]
 	path = src/resources/postcss/utilities
-	url = git@github.com:moderntribe/tribe-common-styles.git
+	url = git@github.com:the-events-calendar/tribe-common-styles.git
