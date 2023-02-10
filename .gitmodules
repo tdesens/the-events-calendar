@@ -1,9 +1,3 @@
-[submodule "vendor/jquery-placeholder"]
-	path = vendor/jquery-placeholder
-	url = https://github.com/mathiasbynens/jquery-placeholder.git
-[submodule "vendor/php-date-formatter"]
-	path = vendor/php-date-formatter
-	url = https://github.com/kartik-v/php-date-formatter.git
 [submodule "common"]
 	path = common
 	url = git@github.com:the-events-calendar/tribe-common.git
