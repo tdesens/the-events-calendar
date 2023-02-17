@@ -1540,16 +1540,15 @@ if ( ! function_exists( 'tribe_events_is_view_enabled' ) ) {
  * may not have been registered by the time our ajax responses are generated. To avoid leaving unparsed
  * shortcodes in our excerpts then we strip out anything that looks like one.
  *
- * @param WP_Post|int|null $post                       The Post Object|ID, if null defaults to `get_the_ID()`
- * @param array            $allowed_html               The wp_kses compatible array
- * @param boolean          $skip_postdata_manipulation Optional. Defaults to false. When true, the resetting of global $post variable is disabled. (Useful for
- *                                                     some contexts like month view.)
+ * @param WP_Post|int|null $post         The Post Object|ID, if null defaults to `get_the_ID()`
+ * @param array            $allowed_html The wp_kses compatible array
+ * @param boolean          $__deprecated Deprecated param.
  *
  * @return string|null Will return null on Bad Post Instances
  * @category Events
  *
  */
-function tribe_events_get_the_excerpt( $post = null, $allowed_html = null, $skip_postdata_manipulation = false ) {
+function tribe_events_get_the_excerpt( $post = null, $allowed_html = null, $__deprecated = false ) {
 	static $cache_var_name = __FUNCTION__;
 
 	$cache_excerpts = tribe_get_var( $cache_var_name, [] );
@@ -1594,8 +1593,6 @@ function tribe_events_get_the_excerpt( $post = null, $allowed_html = null, $skip
 			'ol'     => $base_attrs,
 		];
 	}
-
-	$post_id = $post->ID;
 
 	/**
 	 * Allow developers to filter what are the allowed HTML on the Excerpt
@@ -1646,7 +1643,6 @@ function tribe_events_get_the_excerpt( $post = null, $allowed_html = null, $skip
 
 	$cache_excerpts_key = implode( ':', [
 		$post->ID,
-		$skip_postdata_manipulation,
 		$allow_shortcodes,
 		$remove_shortcodes,
 		json_encode( $allowed_html ),
@@ -1708,11 +1704,6 @@ function tribe_events_get_the_excerpt( $post = null, $allowed_html = null, $skip
 		tribe_set_var( $cache_var_name, $cache_excerpts );
 	}
 
-	if ( ! $skip_postdata_manipulation ) {
-		// Setup post data to be able to use WP template tags
-		setup_postdata( $post );
-	}
-
 	/**
 	 * Filter the event excerpt used in various views.
 	 *
@@ -1720,11 +1711,6 @@ function tribe_events_get_the_excerpt( $post = null, $allowed_html = null, $skip
 	 * @param WP_Post $post
 	 */
 	$excerpt = apply_filters( 'tribe_events_get_the_excerpt', $cache_excerpts[ $cache_excerpts_key ], $post );
-
-	if ( ! $skip_postdata_manipulation ) {
-		wp_reset_postdata();
-	}
-
 	return $excerpt;
 }
 
