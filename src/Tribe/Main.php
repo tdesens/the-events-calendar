@@ -655,6 +655,9 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			// Set up the installer.
 			tribe_register_provider( TEC\Events\Installer\Provider::class );
 
+			// Set up the settings.
+			tribe_register_provider( TEC\Events\Settings\Provider::class );
+
 			/**
 			 * Allows other plugins and services to override/change the bound implementations.
 			 *
