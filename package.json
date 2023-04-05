@@ -1,6 +1,6 @@
 {
   "name": "the-events-calendar",
-  "version": "6.0.9",
+  "version": "6.0.11",
   "repository": "git@github.com:the-events-calendar/the-events-calendar.git",
   "_zipname": "the-events-calendar",
   "_zipfoldername": "the-events-calendar",
@@ -10,10 +10,7 @@
   "_glotPressUrl": "https://translate.wordpress.org",
   "_glotPressSlug": "wp-plugins/the-events-calendar/stable",
   "_glotPressFileFormat": "%textdomain%-%wp_locale%.%format%",
-  "_glotPressFormats": [
-    "po",
-    "mo"
-  ],
+  "_glotPressFormats": ["po", "mo"],
   "_glotPressFilter": {
     "translation_sets": false,
     "minimum_percentage": 30,
@@ -55,12 +52,12 @@
     "preinstall": "if [ -d node_modules/@the-events-calendar/product-taskmaster ]; then node node_modules/@the-events-calendar/product-taskmaster/scripts/syncPackageJSON.js; fi",
     "analyze": "webpack-bundle-analyzer -m static stats.json",
     "bootstrap": "./scripts/linkDependencies",
-    "build:webpack": "cross-env NODE_ENV=production webpack -p",
+    "build:webpack": "export NODE_OPTIONS=--openssl-legacy-provider && cross-env NODE_ENV=production webpack -p",
     "build:gulp": "cross-env NODE_ENV=production gulp",
-    "build:common": "cd common && npm run build",
+    "build:common": "export NODE_OPTIONS=--openssl-legacy-provider && cd common && npm run build",
     "prebuild": "node node_modules/@the-events-calendar/product-taskmaster/scripts/syncBrowserslistConfig.js",
-    "build": "npm run build:webpack && npm run build:gulp",
-    "dev": "cross-env NODE_ENV=development webpack -d --watch",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && npm run build:webpack && npm run build:gulp",
+    "dev": "export NODE_OPTIONS=--openssl-legacy-provider && cross-env NODE_ENV=development webpack -d --watch",
     "gettext-strings": "cross-env BABEL_ENV=gettext webpack",
     "preanalyze": "cross-env NODE_ENV=production webpack -p --profile --json > stats.json",
     "lint": "npm run lint:eslint && npm run lint:stylelint",
@@ -70,10 +67,7 @@
     "zip": "node node_modules/@the-events-calendar/product-taskmaster/util/zip.js",
     "glotpress": "gulp glotpress"
   },
-  "engines": {
-    "node": "16.6.1",
-    "npm": "7.20.3"
-  },
+  "engines": { "node": "18.13.0", "npm": "8.19.3" },
   "devDependencies": {
     "@the-events-calendar/product-taskmaster": "^2.1.1",
     "@wordpress/hooks": "^1.3.2",
