@@ -15,6 +15,7 @@ use Serializable;
 use tad_DI52_Container;
 use TEC\Events\Custom_Tables\V1\Models\Formatters\Formatter;
 use TEC\Events\Custom_Tables\V1\Models\Validators\ValidatorInterface;
+use Tribe__Cache_Listener;
 
 /**
  * Class Model
@@ -192,6 +193,18 @@ abstract class Model implements Serializable {
 		$this->hashed_keys = array_merge( $this->hashed_keys, $extended_hashed_keys );
 		$this->extended_properties = $extended_properties;
 	}
+
+
+
+
+	public $cache_key = null;
+	public function flush_cache() {
+		if ( $this->cache_key ) {
+			tribe_cache()->delete( $this->cache_key, Tribe__Cache_Listener::TRIGGER_SAVE_POST );
+			$this->cache_key = null;
+		}
+	}
+
 	/**
 	 * Get the name of the table that is being affected by this model.
 	 *
@@ -392,6 +405,8 @@ abstract class Model implements Serializable {
 		$this->errors             = [];
 		static::$static_errors    = [];
 		$this->single_validations = [];
+		// If we have a cache, let's clear it.
+		$this->flush_cache();
 
 		return $this;
 	}
