@@ -16,6 +16,8 @@ use Tribe__Date_Utils as Dates;
 use Tribe__Utils__Array as Arr;
 use Tribe__Context;
 
+use DateTime;
+
 class Day_View extends View {
 	use With_Fast_Forward_Link;
 
@@ -97,6 +99,9 @@ class Day_View extends View {
 			return $this->cached_event_dates[ $cache_key ];
 		}
 
+		// When dealing with previous event date we only fetch one.
+		$args['posts_per_page'] = 1;
+
 		// Find the first event that starts before the start of today.
 		$prev_event = tribe_events()
 			->by_args( $args )
@@ -105,6 +110,8 @@ class Day_View extends View {
 			->first();
 
 		if ( ! $prev_event instanceof \WP_Post ) {
+			$this->cached_event_dates[ $cache_key ] = false;
+
 			return false;
 		}
 
@@ -172,6 +179,9 @@ class Day_View extends View {
 			return $this->cached_event_dates[ $cache_key ];
 		}
 
+		// For the next event date we only care about 1 item.
+		$args['posts_per_page'] = 1;
+
 		// The first event that ends after the end of the month; it could still begin in this month.
 		$next_event = tribe_events()
 			->by_args( $args )
@@ -180,6 +190,8 @@ class Day_View extends View {
 			->first();
 
 		if ( ! $next_event instanceof \WP_Post ) {
+			$this->cached_event_dates[ $cache_key ] = false;
+
 			return false;
 		}
 
