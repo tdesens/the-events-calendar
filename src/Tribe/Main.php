@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Main Tribe Events Calendar class.
  */
@@ -40,14 +41,14 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		const VENUE_POST_TYPE     = 'tribe_venue';
 		const ORGANIZER_POST_TYPE = 'tribe_organizer';
 
-		const VERSION             = '6.0.7.1';
+		const VERSION             = '6.1.3';
 
 		/**
 		 * Min Pro Addon
 		 *
 		 * @deprecated 4.8
 		 */
-		const MIN_ADDON_VERSION   = '6.0.0-dev';
+		const MIN_ADDON_VERSION   = '6.1.0-dev';
 
 		/**
 		 * Min Common
@@ -77,7 +78,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		 *
 		 * @since 4.8
 		 */
-		protected $min_et_version = '5.5.2-dev';
+		protected $min_et_version = '5.6.1-dev';
 
 		/**
 		 * Maybe display data wrapper
@@ -284,8 +285,15 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		public $singular_organizer_label;
 		public $plural_organizer_label;
 
+		public $singular_event_label_lowercase;
+		public $plural_event_label_lowercase;
+
 		public $singular_event_label;
 		public $plural_event_label;
+
+		public $currentDay;
+		public $errors;
+		public $registered;
 
 		/** @var Tribe__Events__Default_Values */
 		private $default_values = null;
@@ -345,6 +353,8 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			add_action( 'plugins_loaded', [ $this, 'maybe_bail_if_old_et_is_present' ], -1 );
 			add_action( 'plugins_loaded', [ $this, 'maybe_bail_if_invalid_wp_or_php' ], -1 );
 			add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ], 0 );
+
+			add_filter( 'tribe_tickets_integrations_should_load_freemius', '__return_false' );
 
 			// Prevents Image Widget Plus from been problematic
 			$this->compatibility_unload_iwplus_v102();
@@ -482,9 +492,27 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			 */
 			$this->init_autoloading();
 
+			add_filter( 'tec_common_parent_plugin_file', [ $this, 'include_parent_plugin_path_to_common' ] );
+
 			Tribe__Main::instance();
 
 			add_action( 'tribe_common_loaded', [ $this, 'bootstrap' ], 0 );
+		}
+
+		/**
+		 * Adds our main plugin file to the list of paths.
+		 *
+		 * @since 6.1.0
+		 *
+		 *
+		 * @param array<string> $paths The paths to TCMN parent plugins.
+		 *
+		 * @return array<string>
+		 */
+		public function include_parent_plugin_path_to_common( $paths ): array {
+			$paths[] = TRIBE_EVENTS_FILE;
+
+			return $paths;
 		}
 
 		/**
@@ -572,6 +600,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			tribe_register_provider( 'Tribe__Events__Aggregator__Processes__Service_Provider' );
 			tribe_register_provider( Tribe\Events\Taxonomy\Taxonomy_Provider::class );
 			tribe_register_provider( 'Tribe__Events__Editor__Provider' );
+			tribe_register_provider( TEC\Events\Configuration\Provider::class );
 
 			// @todo After version 6.0.0 this needs to move to the Events folder provider.
 			tribe_register_provider( TEC\Events\Legacy\Views\V1\Provider::class );
@@ -650,6 +679,15 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 
 			// Load the new third-party integration system.
 			tribe_register_provider( TEC\Events\Integrations\Provider::class );
+
+			// Set up the installer.
+			tribe_register_provider( TEC\Events\Installer\Provider::class );
+
+			// Set up Site Health
+			tribe_register_provider( TEC\Events\Site_Health\Provider::class );
+
+			// Set up Telemetry
+			tribe_register_provider( TEC\Events\Telemetry\Provider::class );
 
 			/**
 			 * Allows other plugins and services to override/change the bound implementations.
@@ -1834,7 +1872,16 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		public function post_class( $classes ) {
 			global $post;
 			if ( is_object( $post ) && isset( $post->post_type ) && $post->post_type == self::POSTTYPE && $terms = get_the_terms( $post->ID, self::TAXONOMY ) ) {
+				if ( $terms instanceof WP_Error ) {
+					// IF the taxonomy is not registered, we get a WP_Error object.
+					return $classes;
+				}
+
 				foreach ( $terms as $term ) {
+					if ( ! $term instanceof WP_Term ) {
+						continue;
+					}
+
 					$classes[] = 'cat_' . sanitize_html_class( $term->slug, $term->term_taxonomy_id );
 				}
 			}
@@ -1865,35 +1912,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			// Setup Linked Posts singleton after we've set up the post types that we care about
 			Tribe__Events__Linked_Posts::instance();
 
-			$taxonomy_args = [
-				'hierarchical'          => true,
-				'update_count_callback' => '',
-				'rewrite'               => [
-					'slug'         => $this->rewriteSlug . '/' . $this->category_slug,
-					'with_front'   => false,
-					'hierarchical' => true,
-				],
-				'public'                => true,
-				'show_ui'               => true,
-				'labels'                => $this->taxonomyLabels,
-				'capabilities'          => [
-					'manage_terms' => 'publish_tribe_events',
-					'edit_terms'   => 'publish_tribe_events',
-					'delete_terms' => 'publish_tribe_events',
-					'assign_terms' => 'edit_tribe_events',
-				],
-			];
-
-			/**
-			 * Filter the event category taxonomy arguments used in register_taxonomy.
-			 *
-			 * @param array $taxonomy_args
-			 *
-			 * @since 4.5.5
-			 */
-			$taxonomy_args = apply_filters( 'tribe_events_register_event_cat_type_args', $taxonomy_args );
-
-			register_taxonomy( self::TAXONOMY, self::POSTTYPE, $taxonomy_args );
+			$this->register_taxonomy();
 
 			if ( Tribe__Settings_Manager::get_option( 'showComments', 'no' ) == 'yes' ) {
 				add_post_type_support( self::POSTTYPE, 'comments' );
@@ -2499,6 +2518,9 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 				$event_url = home_url( '/' );
 			}
 
+			// Ensure the URL ends with a trailing slash.
+			$event_url = trailingslashit( $event_url );
+
 			// URL Arguments on home_url() pre-check
 			$url_query = @parse_url( $event_url, PHP_URL_QUERY );
 			if ( null === $url_query ) {
@@ -2754,6 +2776,8 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			if ( ! is_network_admin()  ) {
 				// We set with a string to avoid having to include a file here.
 				set_transient( '_tribe_events_delayed_flush_rewrite_rules', 'yes', 0 );
+
+				self::clear_ct1_activation_state();
 			}
 
 			if ( ! is_network_admin() && ! isset( $_GET['activate-multi'] ) ) {
@@ -2785,6 +2809,8 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			if ( ! class_exists( 'Tribe__Cache' ) ) {
 				require_once dirname( dirname( __FILE__ ) ) . '/common/src/Tribe/Cache.php';
 			}
+
+			self::clear_ct1_activation_state();
 
 			$hook_name = 'tribe_schedule_transient_purge';
 
@@ -3540,6 +3566,10 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 
 			$current_hidden_boxes = get_user_option( 'metaboxhidden_nav-menus', $user_id );
 
+			if ( ! is_array( $current_hidden_boxes ) ) {
+				return;
+			}
+
 			if ( $array_key = array_search( 'add-' . self::POSTTYPE, $current_hidden_boxes ) ) {
 				unset( $current_hidden_boxes[ $array_key ] );
 			}
@@ -4057,6 +4087,69 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			];
 
 			$this->get_autoloader_instance()->register_prefixes( $prefixes );
+		}
+
+		/**
+		 * Registers the Events' category taxonomy in WordPress.
+		 *
+		 * @since 6.0.9
+		 *
+		 * @return WP_Taxonomy|WP_Error The registered taxonomy object on success, WP_Error object on failure.
+		 */
+		public function register_taxonomy() {
+			$taxonomy_args = [
+					'hierarchical'          => true,
+					'update_count_callback' => '',
+					'rewrite'               => [
+							'slug'         => $this->rewriteSlug . '/' . $this->category_slug,
+							'with_front'   => false,
+							'hierarchical' => true,
+					],
+					'public'                => true,
+					'show_ui'               => true,
+					'labels'                => $this->taxonomyLabels,
+					'capabilities'          => [
+							'manage_terms' => 'publish_tribe_events',
+							'edit_terms'   => 'publish_tribe_events',
+							'delete_terms' => 'publish_tribe_events',
+							'assign_terms' => 'edit_tribe_events',
+					],
+			];
+
+			/**
+			 * Filter the event category taxonomy arguments used in register_taxonomy.
+			 *
+			 * @since 4.5.5
+			 *
+			 * @param array $taxonomy_args
+			 *
+			 */
+			$taxonomy_args = apply_filters( 'tribe_events_register_event_cat_type_args', $taxonomy_args );
+
+			return register_taxonomy( self::TAXONOMY, self::POSTTYPE, $taxonomy_args );
+		}
+
+		/**
+		 * Idempotent method to clear the state of the Custom Tables v1 activation state.
+		 *
+		 * Note the state might be persisted in the database, as a transient, or in the cache.
+		 * The method will handle both cases.
+		 *
+		 * @since 6.0.8
+		 *
+		 * @return void The method will clear the state of the Custom Tables v1 activation.
+		 */
+		public static function clear_ct1_activation_state(): void {
+			/*
+			 * Value is hard-coded to avoid autoloading the Activation class for the sole purpose of getting the
+			 * transient name.
+			 *
+			 * @see TEC\Events\Custom_Tables\V1\Activation::ACTIVATION_TRANSIENT
+			 */
+			$transient_key = 'tec_custom_tables_v1_initialized';
+
+			delete_transient( $transient_key );
+			wp_cache_delete( $transient_key );
 		}
 	}
 }

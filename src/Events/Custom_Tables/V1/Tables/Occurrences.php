@@ -29,7 +29,7 @@ class Occurrences extends Abstract_Custom_Table {
 	 *
 	 * @inheritDoc
 	 */
-	const SCHEMA_VERSION = '1.0.1';
+	const SCHEMA_VERSION = '1.0.2';
 
 	/**
 	 * @inheritDoc
@@ -60,17 +60,18 @@ class Occurrences extends Abstract_Custom_Table {
 		$table_name      = self::table_name( true );
 		$charset_collate = $wpdb->get_charset_collate();
 
+		// VARCHAR(19) to store YYYY-MM-DD HH:MM:SS values as strings and allow partial compare.
 		return "CREATE TABLE `{$table_name}` (
-			`occurrence_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-			`event_id` BIGINT(20) UNSIGNED NOT NULL,
-			`post_id` BIGINT(20) UNSIGNED NOT NULL,
-			`start_date` DATETIME NOT NULL,
-			`start_date_utc` DATETIME NOT NULL,
-			`end_date` DATETIME NOT NULL,
-			`end_date_utc` DATETIME NOT NULL,
-			`duration` MEDIUMINT(30) DEFAULT 7200,
-			`hash` VARCHAR(40) NOT NULL,
-			`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			`occurrence_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			`event_id` bigint(20) unsigned NOT NULL,
+			`post_id` bigint(20) unsigned NOT NULL,
+			`start_date` varchar(19) NOT NULL,
+			`start_date_utc` varchar(19) NOT NULL,
+			`end_date` varchar(19) NOT NULL,
+			`end_date_utc` varchar(19) NOT NULL,
+			`duration` mediumint(30) DEFAULT 7200,
+			`hash` varchar(40) NOT NULL,
+			`updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			PRIMARY KEY  (`occurrence_id`)
 			) {$charset_collate};";
 	}
