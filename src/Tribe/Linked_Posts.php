@@ -501,10 +501,8 @@ class Tribe__Events__Linked_Posts {
 		$func_args = func_get_args();
 		$cache_key = $this->cache->make_key( $func_args, 'linked_post_info_' );
 		if ( isset( $this->cache[ $cache_key ] ) ) {
-			printr($cache_key,"I am cached!");
 			return $this->cache[ $cache_key ];
 		}
-		printr("I am running the rest of the code");
 
 		/**
 		 * Whether to return all linked posts if the args actually find no linked posts.
