@@ -501,8 +501,10 @@ class Tribe__Events__Linked_Posts {
 		$func_args = func_get_args();
 		$cache_key = $this->cache->make_key( $func_args, 'linked_post_info_' );
 		if ( isset( $this->cache[ $cache_key ] ) ) {
+			printr($cache_key,"I am cached!");
 			return $this->cache[ $cache_key ];
 		}
+		printr("I am running the rest of the code");
 
 		/**
 		 * Whether to return all linked posts if the args actually find no linked posts.
@@ -530,17 +532,17 @@ class Tribe__Events__Linked_Posts {
 		}
 
 		$defaults = [
-			'post_type'            => $linked_post_type,
-			'post_status'          => [
+			'post_type'           => $linked_post_type,
+			'post_status'         => [
 				'publish',
 				'draft',
 				'private',
 				'pending',
 			],
-			'order'                => 'ASC',
-			'orderby'              => 'post__in post_title',
-			'ignore_sticky_posts ' => true,
-			'nopaging'             => true,
+			'order'               => 'ASC',
+			'orderby'             => 'post_title',
+			'ignore_sticky_posts' => true,
+			'nopaging'            => true,
 		];
 
 		if ( is_array( $linked_post_ids ) ) {
@@ -581,12 +583,36 @@ class Tribe__Events__Linked_Posts {
 			return $linked_posts;
 		}
 
-		$result = new WP_Query( $args );
+		// Set $linked_posts back to an array.
+		$linked_posts = [];
+		$batch_size = apply_filters( 'tribe_events_linked_posts_query_batch_size', 200, $linked_post_type );
 
-		if ( $result->have_posts() ) {
-			$linked_posts = $result->posts;
+		// Determine the total number of posts that match the query
+		$count_args = array_merge($args, ['fields' => 'ids', 'posts_per_page' => 1]);
+		$count_query = new WP_Query($count_args);
+		$total_posts = $count_query->found_posts;
+
+		// If the total number of posts is larger than the batch size, perform the query in batches
+		if ($total_posts > $batch_size) {
+			$num_batches = ceil($total_posts / $batch_size);
+
+			for ($i = 0; $i < $num_batches; $i++) {
+				$offset = $i * $batch_size;
+				$args['offset'] = $offset;
+				$args['posts_per_page'] = $batch_size;
+				$args['nopaging'] = false;
+
+				$result = new WP_Query($args);
+				if ($result->have_posts()) {
+					$linked_posts = array_merge($linked_posts, $result->posts);
+				}
+			}
 		} else {
-			$linked_posts = [];
+			// If the total number of posts is within the batch size, just execute the query normally
+			$result = new WP_Query($args);
+			if ($result->have_posts()) {
+				$linked_posts = $result->posts;
+			}
 		}
 
 		$this->cache[ $cache_key ] = $linked_posts;
