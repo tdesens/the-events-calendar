@@ -532,17 +532,19 @@ class Tribe__Events__Linked_Posts {
 		}
 
 		$defaults = [
-			'post_type'           => $linked_post_type,
-			'post_status'         => [
+			'post_type'              => $linked_post_type,
+			'post_status'            => [
 				'publish',
 				'draft',
 				'private',
 				'pending',
 			],
-			'order'               => 'ASC',
-			'orderby'             => 'post_title',
-			'ignore_sticky_posts' => true,
-			'nopaging'            => true,
+			'order'                  => 'ASC',
+			'orderby'                => 'post_title',
+			'ignore_sticky_posts'    => true,
+			'nopaging'               => true,
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false
 		];
 
 		if ( is_array( $linked_post_ids ) ) {
@@ -585,14 +587,28 @@ class Tribe__Events__Linked_Posts {
 
 		// Set $linked_posts back to an array.
 		$linked_posts = [];
+
+		/**
+		 * Filters the batch size for the linked posts query.
+		 *
+		 * This filter allows customization of the batch size used when querying linked posts.
+		 * By modifying the batch size, developers can balance query performance with memory usage.
+		 *
+		 * @since TBD
+		 *
+		 * @param int    $batch_size       The size of the batch for each query iteration, default is 200.
+		 * @param string $linked_post_type The post type for the linked posts being queried.
+		 *
+		 * @return int    The filtered batch size to be used for the query.
+		 */
 		$batch_size = apply_filters( 'tribe_events_linked_posts_query_batch_size', 200, $linked_post_type );
 
-		// Determine the total number of posts that match the query
+		// Merge count-specific args to determine the total number of posts that match the query.
 		$count_args = array_merge($args, ['fields' => 'ids', 'posts_per_page' => 1]);
 		$count_query = new WP_Query($count_args);
 		$total_posts = $count_query->found_posts;
 
-		// If the total number of posts is larger than the batch size, perform the query in batches
+		// If the total number of posts is larger than the batch size, perform the query in batches.
 		if ($total_posts > $batch_size) {
 			$num_batches = ceil($total_posts / $batch_size);
 
@@ -608,7 +624,7 @@ class Tribe__Events__Linked_Posts {
 				}
 			}
 		} else {
-			// If the total number of posts is within the batch size, just execute the query normally
+			// If the total number of posts is within the batch size, just execute the query normally.
 			$result = new WP_Query($args);
 			if ($result->have_posts()) {
 				$linked_posts = $result->posts;
