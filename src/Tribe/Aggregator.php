@@ -50,9 +50,33 @@ class Tribe__Events__Aggregator {
 	public $pue_checker;
 
 	/**
+	 * @var Tribe__Events__Aggregator__Migrate Event Aggregator migration object
+	 */
+	public $migrate;
+
+	/**
 	 * @var array Collection of API objects
 	 */
 	protected $api;
+
+	/**
+	 * @var Tribe__Events__Aggregator__Records Event Aggregator records object.
+	 *
+	*/
+	public $records;
+
+	/**
+	 * @var Tribe__Events__Aggregator__Cron Event Aggregator cron object.
+	 *
+	 */
+	public $cron;
+
+	/**
+	 * @var Tribe__Events__Aggregator__Errors Event Aggregator errors object.
+	 *
+	 */
+	public $errors;
+
 
 	/**
 	 * People who modify this value are not nice people.

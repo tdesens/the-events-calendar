@@ -197,12 +197,42 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		public $pluginName;
 
 		public $displaying;
+
+		/**
+		 * @var string
+		 */
 		public $plugin_file;
+
+		/**
+		 * @var string
+		 */
 		public $plugin_dir;
+
+		/**
+		 * @var string
+		 */
 		public $plugin_path;
+
+		/**
+		 * @var string
+		 */
 		public $plugin_url;
+
+		/**
+		 * @var string
+		 */
 		public $plugin_name;
+
+		/**
+		 * @var Tribe__Events__Event_Cleaner_Scheduler
+		 */
+		public $scheduler;
+
 		public $date;
+
+		/**
+		 * @var int
+		 */
 		protected $tabIndexStart = 2000;
 
 		public $metaTags = [
@@ -279,23 +309,64 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		 */
 		public $monthsShort;
 
+		/**
+		 * @var string
+		 */
 		public $singular_venue_label;
+
+		/**
+		 * @var string
+		 */
 		public $plural_venue_label;
 
+		/**
+		 * @var string
+		 */
 		public $singular_organizer_label;
+
+		/**
+		 * @var string
+		 */
 		public $plural_organizer_label;
 
+		/**
+		 * @var string
+		 */
 		public $singular_event_label_lowercase;
+
+		/**
+		 * @var string
+		 */
 		public $plural_event_label_lowercase;
 
+		/**
+		 * @var string
+		 */
 		public $singular_event_label;
+
+		/**
+		 * @var string
+		 */
 		public $plural_event_label;
 
+		/**
+		 * @var string
+		 */
 		public $currentDay;
+
+		/**
+		 * @var string
+		 */
 		public $errors;
+
+		/**
+		 * @var Tribe__Events__Plugin_Register
+		 */
 		public $registered;
 
-		/** @var Tribe__Events__Default_Values */
+		/**
+		 * @var Tribe__Events__Default_Values
+		 */
 		private $default_values = null;
 
 		/**
