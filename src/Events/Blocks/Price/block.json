@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "tribe/event-price",
+  "title": "Event Price",
+  "description": "Let visitors know the cost of this event or if it’s free to attend.",
+  "category": "tribe-events",
+  "keywords": [
+    "event",
+    "events-gutenberg",
+    "tribe"
+  ],
+  "supports": {
+    "html": false
+  },
+  "editorScript": "tec-events-price-block-editor-script",
+  "editorStyle": "tec-events-price-block-editor-style"
+}
