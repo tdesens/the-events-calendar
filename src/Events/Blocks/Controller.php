@@ -22,7 +22,7 @@ use Tribe__Events__Editor__Blocks__Event_Datetime;
 use Tribe__Events__Editor__Blocks__Event_Venue;
 use Tribe__Events__Editor__Blocks__Event_Organizer;
 use Tribe__Events__Editor__Blocks__Event_Links;
-use Tribe__Events__Editor__Blocks__Event_Price;
+use TEC\Events\Blocks\Price\Block as Price_Block;
 use Tribe__Events__Editor__Blocks__Event_Category;
 use Tribe__Events__Editor__Blocks__Event_Tags;
 use Tribe__Events__Editor__Blocks__Event_Website;
@@ -44,6 +44,7 @@ class Controller extends \TEC\Common\Contracts\Provider\Controller {
 	public function do_register(): void {
 
 		// Register these all the time - as we now use them in most of the templates, blocks or otherwise.
+		$this->container->singleton( 'events.editor.meta', 'Tribe__Events__Editor__Meta' );
 		$this->container->singleton( 'events.editor.template.overwrite', Template_Overwrite::class, [ 'hook' ] );
 		$this->container->singleton( 'events.editor.template', Template::class );
 		$this->container->singleton( 'events.editor.configuration', Configuration::class, [ 'hook' ] );
@@ -55,7 +56,7 @@ class Controller extends \TEC\Common\Contracts\Provider\Controller {
 		$this->container->singleton( 'events.editor.blocks.event-venue', Tribe__Events__Editor__Blocks__Event_Venue::class, [ 'load' ] );
 		$this->container->singleton( 'events.editor.blocks.event-organizer', Tribe__Events__Editor__Blocks__Event_Organizer::class, [ 'load' ] );
 		$this->container->singleton( 'events.editor.blocks.event-links', Tribe__Events__Editor__Blocks__Event_Links::class, [ 'load' ] );
-		$this->container->singleton( 'events.editor.blocks.event-price', Tribe__Events__Editor__Blocks__Event_Price::class, [ 'load' ] );
+		$this->container->singleton( 'events.editor.blocks.event-price', Price_Block::class, [ 'load' ] );
 		$this->container->singleton( 'events.editor.blocks.event-category', Tribe__Events__Editor__Blocks__Event_Category::class, [ 'load' ] );
 		$this->container->singleton( 'events.editor.blocks.event-tags', Tribe__Events__Editor__Blocks__Event_Tags::class, [ 'load' ] );
 		$this->container->singleton( 'events.editor.blocks.event-website', Tribe__Events__Editor__Blocks__Event_Website::class, [ 'load' ] );
@@ -70,23 +71,34 @@ class Controller extends \TEC\Common\Contracts\Provider\Controller {
 	 * @since TBD
 	 */
 	public function register_for_blocks() {
-		/** @var \Tribe__Editor $editor */
-		$editor = tribe( 'editor' );
+		// Setup to check if gutenberg is active
+		$this->container->singleton( 'events.editor', 'Tribe__Events__Editor' );
+		$this->container->singleton( 'events.editor.compatibility', 'Tribe__Events__Editor__Compatibility' );
+		tribe( 'events.editor.compatibility' )->hook();
 
-		// Only register for blocks if we are using them.
-		if ( ! $editor->should_load_blocks() ) {
+		tribe( 'events.editor' )->hook();
+
+		if ( ! tribe( 'editor' )->should_load_blocks() && ! tec_is_full_site_editor() ) {
 			return;
 		}
-
-		$this->container->singleton( 'events.editor.meta', Meta::class );
-		$this->container->singleton( 'events.editor.assets', Assets::class, [ 'register' ] );
-
 		$this->hook();
+		$this->call_singletons();
+	}
 
-		// Initialize the correct Singleton.
-		tribe( 'events.editor.assets' );
+	/**
+	 * Call all the Singletons that need to be set up.
+	 *
+	 * @since TBD
+	 *
+	 * @return void
+	 */
+	public function call_singletons() {
+		/**
+		 * Call all the Singletons that need to be setup/hooked
+		 */
+		tribe( 'events.editor.i18n' );
+		tribe( 'events.editor.template.overwrite' );
 		tribe( 'events.editor.configuration' );
-		tribe( 'events.editor.template.overwrite' )->hook();
 	}
 
 	/**
@@ -118,20 +130,84 @@ class Controller extends \TEC\Common\Contracts\Provider\Controller {
 	protected function hook() {
 		// Setup the Meta registration.
 		add_action( 'init', tribe_callback( 'events.editor.meta', 'register' ), 15 );
-		add_filter( 'register_meta_args', tribe_callback( 'events.editor.meta', 'register_meta_args' ), 10, 4 );
 		add_action( 'tribe_plugins_loaded', [ $this, 'register_blocks' ], 300 );
-
-		// Handle REST specific meta filtering.
-		add_filter( 'rest_dispatch_request', tribe_callback( 'events.editor.meta', 'filter_rest_dispatch_request' ), 10, 3 );
 
 		global $wp_version;
 		if ( version_compare( $wp_version, '5.8', '<' ) ) {
-			// WP version is less then 5.8.
-			add_action( 'block_categories', tribe_callback( 'events.editor', 'block_categories' ) );
+			// For WordPress versions before 5.8, use the block_categories filter
+			add_filter( 'block_categories', [ $this, 'block_categories' ], 10, 2 );
 		} else {
-			// WP version is 5.8 or above.
-			add_action( 'block_categories_all', tribe_callback( 'events.editor', 'block_categories' ) );
+			// For WordPress version 5.8 and above, use the block_categories_all filter
+			add_filter( 'block_categories_all', [ $this, 'block_categories_all' ], 10, 2 );
 		}
+	}
+
+	/**
+	 * Add "Event Blocks" category to the editor
+	 *
+	 * @since      4.7
+	 *
+	 * @deprecated 5.8.2
+	 *
+	 * @param array<array<string|string>> $categories An array of categories each an array
+	 *                                                in the format property => value.
+	 * @param WP_Post                     $post       The post object we're editing.
+	 *
+	 * @return array
+	 */
+	public function block_categories( $categories, $post ) {
+		// Handle where someone is using this outside of this object
+		global $wp_version;
+		if ( version_compare( $wp_version, '5.8', '>=' ) ) {
+			_deprecated_function( __FUNCTION__, '5.8.2', 'block_categories_all' );
+		}
+
+		if ( Tribe__Events__Main::POSTTYPE !== $post->post_type ) {
+			return $categories;
+		}
+
+		return array_merge(
+			$categories,
+			[
+				[
+					'slug'  => 'tribe-events',
+					'title' => __( 'Event Blocks', 'the-events-calendar' ),
+				],
+			]
+		);
+	}
+
+	/**
+	 * Add "Event Blocks" category to the editor.
+	 *
+	 * @since 5.8.2 block_categories() modified to cover WP 5.8 change of filter in a backwards-compatible way.
+	 *
+	 * @param array<array<string,string>> $categories An array of categories each an array.
+	 *                                                in the format property => value.
+	 * @param WP_Block_Editor_Context     $context    The Block Editor Context object.
+	 *                                                In WP versions prior to 5.8 this was the post object.
+	 *
+	 * @return array<array<string,string>> The block categories, filtered to add the Event Categories if applicable.
+	 */
+	public function block_categories_all( $categories, $context ) {
+		if ( ! $context instanceof WP_Block_Editor_Context ) {
+			return $categories;
+		}
+
+		// Make sure we have the post available.
+		if ( empty( $context->post ) ) {
+			return $categories;
+		}
+
+		return array_merge(
+			$categories,
+			[
+				[
+					'slug'  => 'tribe-events',
+					'title' => __( 'Event Blocks', 'the-events-calendar' ),
+				],
+			]
+		);
 	}
 
 	/**

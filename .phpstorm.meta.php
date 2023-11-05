@@ -14,7 +14,7 @@ namespace PHPSTORM_META {
 		'events.editor.blocks.event-venue'              => \Tribe__Events__Editor__Blocks__Event_Venue::class,
 		'events.editor.blocks.event-organizer'          => \Tribe__Events__Editor__Blocks__Event_Organizer::class,
 		'events.editor.blocks.event-links'              => \Tribe__Events__Editor__Blocks__Event_Links::class,
-		'events.editor.blocks.event-price'              => \Tribe__Events__Editor__Blocks__Event_Price::class,
+		'events.editor.blocks.event-price'              => \TEC\Events\Blocks\Price\Block::class,
 		'events.editor.blocks.event-category'           => \Tribe__Events__Editor__Blocks__Event_Category::class,
 		'events.editor.blocks.event-tags'               => \Tribe__Events__Editor__Blocks__Event_Tags::class,
 		'events.editor.blocks.event-website'            => \Tribe__Events__Editor__Blocks__Event_Website::class,
