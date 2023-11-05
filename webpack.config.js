@@ -39,7 +39,7 @@ const targets = [ //todo: update to TEC blocks.
 		outputScript: './build/Events/Blocks/Price/editor.min.js',
 		outputStyle: `build/Events/Blocks/Price/editor.${ postfix }`,
 		moveFromTo: {
-			'src/resources/js/app/pricet-editor.js': 'build/Events/Blocks/Price/editor.js',
+			'src/resources/js/app/price-editor.js': 'build/Events/Blocks/Price/editor.js',
 			'src/resources/css/app/price-editor.css': 'build/Events/Blocks/Price/editor.css',
 		}
 	}
