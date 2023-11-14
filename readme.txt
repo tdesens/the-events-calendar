@@ -3,9 +3,9 @@
 Contributors: theeventscalendar, borkweb, bordoni, brianjessee, aguseo, camwynsp, GeoffBel, jentheo, leahkoerper, lucatume, neillmcshea, vicskf, zbtirrell, juanfra
 Tags: events, calendar, event, schedule, organizer
 Donate link: https://evnt.is/29
-Requires at least: 5.8.6
-Stable tag: 6.1.3
-Tested up to: 6.2.2
+Requires at least: 6.2.0
+Stable tag: 6.2.7
+Tested up to: 6.4.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -228,6 +228,125 @@ Previous versions of The Events Calendar are not cross-compatible with 6.X add-o
 Remember to always make a backup of your database and files before updating!
 
 == Changelog ==
+
+= [6.2.7] 2023-11-14 =
+
+* Fix - On the Past Events View, the nonce was incorrectly being generated twice, and one of them would be cached in our HTML transient cache. This was causing a 401 nonce errors to occur when the cached nonce expired. The nonce generation was moved outside the HTML generation that is being cached. [TEC-4936]
+* Fix - Wordpress 6.3 introduce some changes in filters that regressed a prior fix for authentication and our new nonce structure used in view pagination. One symptom of the issue was losing the authenticated user and failing to display user specific capabilities on event views. [ECP-1601]
+* Fix - Resolves issue where a deleted venue still attached to an event would cause an `PHP Warning: Undefined variable $data in /code/wp-content/plugins/the-events-calendar/src/Tribe/REST/V1/Post_Repository.php on line 327` error. [TEC-4954]
+* Fix - Resolves an issue with certain versions of Wordpress already having the legacy widget block registered causing us to trigger the console error `Block "core/legacy-widget" is already registered.` would occur. Now we check if registered first. [TEC-4764]
+* Fix - Resolved several `Deprecated: Creation of dynamic property` warnings on: `\Tribe__Events__Linked_Posts__Chooser_Meta_Box::$singular_name_lowercase` and `\TEC\Events\Custom_Tables\V1\Models\Builder::$query` [BTRIA-2088]
+* Tweak - Adjust the content in the admin welcome page to include a link to the TEC Facebook community group. [TEC-4953]
+* Tweak - Added filters: `tec_events_get_full_site_block_template_services`, `tec_events_views_v2_get_rest_nonce_html`
+* Tweak - Changed views: `blocks/archive-events`, `blocks/single-event`
+* Language - 11 new strings added, 119 updated, 0 fuzzied, and 5 obsoleted.
+
+= [6.2.6.1] 2023-11-09 =
+
+* Version - The Events Calendar 6.2.6.1 is only compatible with Event Tickets 5.6.8.1 and higher
+* Fix - Update a common library to prevent possible fatals. [TEC-4978]
+* Language - 0 new strings added, 2 updated, 0 fuzzied, and 0 obsoleted
+
+= [6.2.6] 2023-11-08 =
+
+* Fix - SEO: Ensure that the noindex meta tag properly observes whether events are present on the page or not. [TEC-4976]
+* Fix - SEO: Add noindex, nofollow for grid-based views like Month and Week View when they are not set as the home page. [TEC-4976]
+* Tweak - Add an X-Robots-Tag to the response headers for ical download links to help prevent search engine crawling. [TEC-4976]
+* Tweak - Added filter: `tec_events_ical_header_noindex` to allow preventing the X-Robots-Tag addition. [TEC-4976]
+* Tweak - Added filter `tec_events_seo_robots_meta_include` and `tec_events_seo_robots_meta_include_{$view}` to short-circuit the robots meta tag addition. [TEC-4976]
+* Tweak - Added filter `tec_events_seo_robots_meta_content` to alter the content attribute of the robots meta tag addition. [TEC-4976]
+* Tweak - Added filter `tec_events_seo_robots_meta_allowable_post_types` to allow for the filtering of single post types that can have robots meta tags added.
+* Tweak - Deprecated filters `tec_events_add_no_index_meta_tag`, `tribe_events_add_no_index_meta`, and `tec_events_{$view}_add_no_index_meta` in favor of the above new filters.
+
+= [6.2.5] 2023-11-01 =
+
+* Tweak - Updated hook for showing Event name in the event tickets order report pages. [ET-1810]
+
+= [6.2.4] 2023-10-19 =
+
+* Fix - AM/PM time formats `g:i A` and `g:i a` are now respected for the French locale. [TEC-4807]
+
+= [6.2.3.2] 2023-10-12 =
+
+* Fix - Prevent noindex code from adding tags to single event pages. [TEC-4949]
+* Fix - Correct a problem that can cause a fatal when plugins are deactivated in a certain order. [TEC-4951]
+
+= [6.2.3.1] 2023-10-09 =
+
+* Fix - Prevent a fatal caused by get_noindex_events on Events Calendar PRO views if PRO has not been updated. [TEC-4946]
+* Language - 0 new strings added, 2 updated, 0 fuzzied, and 0 obsoleted
+
+= [6.2.3] 2023-10-03 =
+
+* Fix - Ensure the UI can handle an unlimited number of recurrence rules when users create recurring events using the block editor. [ECP-1572]
+* Fix - Resolved "Uncaught ReferenceError: lodash is not defined" error by adding `lodash` as a dependency for the Block Editor Assets. [ECP-1575]
+* Fix - Resolves an issue around our new nonce structure used in view pagination, losing the authenticated user and failing to display user specific capabilities. [ECP-1581]
+* Tweak - Updated focus state for relevant elements to have default outline ensuring improved accessibility and consistent browser behavior. [TEC-4888]
+* Tweak - Added filters: `tec_events_add_no_index_meta_tag`, `tec_events_noindex`, `tec_events_{$view}_add_no_index_meta`, `tec_events_no_index_meta`
+* Language - 0 new strings added, 183 updated, 0 fuzzied, and 0 obsoleted
+
+= [6.2.2.1] 2023-09-28  =
+
+* Version - The Events Calendar 6.2.2.1 is only compatible with Event Tickets 5.6.5.1 and higher
+* Fix - Fix - Correct issue where Telemetry would register active plugins multiple times. [TEC-4920]
+
+= [6.2.2] 2023-09-13 =
+
+* Version - The Events Calendar 6.2.2 is only compatible with Event Tickets 5.6.5 and higher
+* Fix - When using the Event Tickets email feature the Organizer email and website will no longer be switched. [ET-1843]
+* Fix - When subscribing to an event, the organizer name will not encode as many characters, especially spaces. [ET-1778]
+* Language - 0 new strings added, 9 updated, 0 fuzzied, and 0 obsoleted
+
+= [6.2.1] 2023-09-05 =
+
+* Fix - WP Rewrite was being incorrectly initialized in some scenarios due to container DI, and causing some 404s. This was affecting classes that extend the `Tribe__Rewrite`. [TEC-4844]
+* Fix - Fixed a bug where `0` and `1` were displayed on the `general` and `display` tabs for Network admins on multisite installations. [TEC-4774]
+* Fix - In some cases when multiple Widgets were used on a page, the view results would return the wrong cache, displaying incorrect results. This fixes the inspection of the different view filters being used to determine whether it is cached or not. [ECP-1561]
+* Fix - Correct some accessibility issues in the subscribe dropdowns. Props to @alh0319 for calling these out! [TEC-4185]
+* Tweak - Enhanced venue and organizer labels by updating aria labels with additional placeholders and revised translator comments, improving internationalization and accessibility. [TEC-4874]
+* Tweak - Changed views: `blocks/parts/organizer`, `blocks/parts/subscribe-list`, `modules/meta/organizer`, `modules/meta/venue`, `v2/components/subscribe-links/item`, `v2/components/subscribe-links/list`, `v2/components/subscribe-links/single-event-list`
+* Language - 1 new strings added, 22 updated, 0 fuzzied, and 8 obsoleted
+
+= [6.2.0.1] 2023-08-16 =
+
+* Fix - Ensure we pass the correct number of params to `maybe_get_new_order_from_blocks` [TEC-4889]
+
+= [6.2.0] 2023-08-15 =
+
+* Tweak - Change styling for Venue Blocks to constrain to a card-like style. [ECP-1540]
+* Tweak - Adjust REST endpoints to support multiple venues during event creation and updates. [ECP-1540]
+* Tweak - If multiple venues exist on an event, display them in the classic event editor. [ECP-1540]
+* Fix - Ensure the block editor includes support for user-defined custom CSS classes. [TEC-4724]
+* Fix - Ensure the "Add Organizer" button is visible in the classic editor if organizers have been set. [TEC-4729]
+* Fix - Simplify data handling of venues within the block editor. [ECP-1540]
+* Fix - When removing a newly created organizer in the block editor before saving the event will now trash the draft organizer. [TEC-3865]
+* Tweak - Added filters: `tec_events_rewrite_dynamic_matchers`, `tec_events_views_v2_assets_should_enqueue_single_event_block_editor_styles`, `tec_events_title_taxonomies`, `tec_events_views_v2_view_header_title_element`, `tec_events_views_v2_view_{$view_slug}_header_title_element`, `tec_events_views_v2_view_header_title`, `tec_events_views_v2_view_{$view_slug}_header_title`, `tec_events_views_v2_view_content_title`, `tec_events_views_v2_view_{$view_slug}_content_title`, `tec_get_venue_ids`
+* Tweak - Added actions: `tec_events_after_venue_map_fields`
+* Tweak - Changed views: `blocks/event-venue.php`, `blocks/parts/map.php`, `blocks/parts/venue.php`, `v2/base.php`, `v2/components/breadcrumbs/linked-breadcrumbs.php`, `v2/components/content-title.php`, 'v2/components/header-title.php`, `v2/components/header.php`, `v2/components/messages.php`, `v2/day.php`, `v2/day/event/venue.php`, `v2/list.php`, `v2/list/event/venue.php`, `v2/month.php`
+* Language - 3 new strings added, 72 updated, 1 fuzzied, and 2 obsoleted
+
+
+= [6.1.4] 2023-08-10 =
+
+* Version - The minimum supported version of WordPress is now 6.1.0
+* Fix - In some scenarios our pagination and various view actions would fail due to 403 errors on the REST endpoints, because of failing nonce checks, likely due to cache. Updating the way we handle nonces to avoid some scenarios the wrong nonce could be cached. [TEC-4814]
+* Fix - This issue was regarding our rewrite parsing for the view picker url generation with WPML enabled. It was failing to parse the translated rewrite properly, and leaving unparsed permalinks. [TEC-4758]
+* Fix - Ensure we output valid html around <dt> and <dd> elements in an accessible way. [TEC-4812]
+* Fix - Ensure the block editor includes support for user-defined custom CSS classes. [TEC-4724]
+* Fix - Handle some issues with incorrect application of noindex meta tags. [TEC-4717]
+* Fix - Our logic to include `tribe_events` post type on the tag archive page was incorrectly bleeding into other queries happening on the page. This narrows the scope for the `WP_Query` post type overrides and avoids situations where Divi templates were not loading properly. [TEC-4819]
+* Fix - Correct some PHP 8.1 deprecations that impact loading of views. [TEC-4871]
+* Fix - Prevent TypeError warnings around `admin_footer_text_settings` filter due to type hinting conflicting with other plugins returning null.
+* Tweak - Deprecated misspelled `tribe_get_organiser_object_after` filter for one with correct spelling: `tribe_get_organizer_object_after`. Done as part of [TEC-4812]
+* Tweak - Remove end colons from some translated strings. Done as part of [TEC-4812]
+* Tweak - Fix typo in template displaying stray "w". [TEC-4870]
+* Tweak - Removed code pertaining to Event Tickets CT1. [ETP-874]
+* Tweak - Added filters: `tec_events_views_v2_get_rest_nonces`, `tribe_events_get_organizer_object_after`
+* Tweak - Deprecated filters: `tribe_events_get_organiser_object_after`
+* Tweak - Deprecated functions: In `Tribe\Views\V2\Views\Traits\HTML_Cache.php` the `get_view_nonce_fields()`,`get_view_nonce_attributes()`, `get_view_nonce_json_properties()`, `extract_nonces_before_cache()`, `extract_nonces_before_cache()`, `extract_nonces_before_cache()`, and `maybe_generate_nonce()` functions have been deprecated.
+* Tweak - Changed views: `blocks/classic-event-details.php`, `blocks/event-category.php`, `blocks/event-datetime.php`, `blocks/event-organizer.php`, `blocks/event-price.php`, `blocks/event-tags.php`, `blocks/event-venue.php`, `blocks/event-website.php`, `blocks/featured-image.php`, `blocks/parts/details.php`, `blocks/parts/organizer.php`, `blocks/parts/subscribe-list.php`, `blocks/parts/subscribe-single.php`, `modules/meta/organizer.php`, `modules/meta/venue.php`, `v2/components/events-bar/search.php`, `v2/day.php`, `v2/list.php`, `v2/month.php`, `v2/widgets/widget-events-list.php`.
+* Language - 11 new strings added, 12 updated, 0 fuzzied, and 0 obsoleted.
+
 
 = [6.1.3] 2023-07-13 =
 
