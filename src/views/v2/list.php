@@ -57,17 +57,18 @@ if ( empty( $disable_event_search ) ) {
 		<?php $this->template( 'components/filter-bar' ); ?>
 
 		<div class="tribe-events-calendar-list">
-
+			<?php $first_event = true; ?>
 			<?php foreach ( $events as $event ) : ?>
 				<?php $this->setup_postdata( $event ); ?>
 
-				<?php $this->template( 'list/month-separator', [ 'event' => $event ] ); ?>
+				<?php $this->template( 'list/month-separator', [ 'event' => $event, 'first_event' => $first_event ] ); ?>
 
 				<?php $this->template( 'list/event', [ 'event' => $event ] ); ?>
 
+				<?php $first_event = false; ?>
 			<?php endforeach; ?>
-
-		</div>
+				</ul>
+			</div>
 
 		<?php $this->template( 'list/nav' ); ?>
 

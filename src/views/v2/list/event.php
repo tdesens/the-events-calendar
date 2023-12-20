@@ -21,7 +21,7 @@ $container_classes['tribe-events-calendar-list__event-row--featured'] = $event->
 
 $event_classes = tribe_get_post_class( [ 'tribe-events-calendar-list__event', 'tribe-common-g-row', 'tribe-common-g-row--gutters' ], $event->ID );
 ?>
-<div <?php tribe_classes( $container_classes ); ?>>
+<li <?php tribe_classes( $container_classes ); ?>>
 
 	<?php $this->template( 'list/event/date-tag', [ 'event' => $event ] ); ?>
 
@@ -32,8 +32,8 @@ $event_classes = tribe_get_post_class( [ 'tribe-events-calendar-list__event', 't
 			<div class="tribe-events-calendar-list__event-details tribe-common-g-col">
 
 				<header class="tribe-events-calendar-list__event-header">
-					<?php $this->template( 'list/event/date', [ 'event' => $event ] ); ?>
 					<?php $this->template( 'list/event/title', [ 'event' => $event ] ); ?>
+					<?php $this->template( 'list/event/date', [ 'event' => $event ] ); ?>
 					<?php $this->template( 'list/event/venue', [ 'event' => $event ] ); ?>
 				</header>
 
@@ -44,4 +44,4 @@ $event_classes = tribe_get_post_class( [ 'tribe-events-calendar-list__event', 't
 		</article>
 	</div>
 
-</div>
+</li>

@@ -39,7 +39,12 @@ if ( ! $should_have_month_separator ) {
 $sep_date = empty( $is_past ) && ! empty( $request_date )
 	? max( $event->dates->start_display, $request_date )
 	: $event->dates->start_display;
-?>
+
+
+if ( ! $first_event ) : ?>
+	</ul>
+<?php endif; ?>
+
 <h2 class="tribe-events-calendar-list__month-separator">
 	<time
 		class="tribe-events-calendar-list__month-separator-text tribe-common-h7 tribe-common-h6--min-medium tribe-common-h--alt"
@@ -49,3 +54,4 @@ $sep_date = empty( $is_past ) && ! empty( $request_date )
 		<?php echo esc_html( $sep_date->format_i18n( 'F Y' ) ); ?>
 	</time>
 </h2>
+<ul class="tec-event-list">
