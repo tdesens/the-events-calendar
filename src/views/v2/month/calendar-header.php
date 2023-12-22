@@ -17,9 +17,11 @@ global $wp_locale;
 ?>
 <header class="tribe-events-calendar-month__header" role="rowgroup">
 
-	<h2 class="tribe-common-a11y-visual-hide" id="tribe-events-calendar-header">
+	<div role="row">
+		<h2 class="tribe-common-a11y-visual-hide" id="tribe-events-calendar-header" role="gridcell">
 		<?php printf( esc_html__( 'Calendar of %s', 'the-events-calendar' ), tribe_get_event_label_plural() ); ?>
-	</h2>
+		</h2>
+	</div>
 
 	<div role="row" class="tribe-events-calendar-month__header-row">
 		<?php foreach ( tribe_events_get_days_of_week() as $day ) : ?>

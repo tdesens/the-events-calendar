@@ -25,14 +25,15 @@ use Tribe__Date_Utils as Dates;
 $default_date        = $now;
 $selected_date_value = $this->get( [ 'bar', 'date' ], $default_date );
 $datepicker_date     = Dates::build_date_object( $selected_date_value )->format( $date_formats->compact );
+$picker_label        = _x( 'Click to toggle datepicker and select date', 'Label used for the month view datepicker toggle button.', 'the-events-calendar' );
 ?>
 <div class="tribe-events-c-top-bar__datepicker">
 	<button
 		class="tribe-common-h3 tribe-common-h--alt tribe-events-c-top-bar__datepicker-button"
 		data-js="tribe-events-top-bar-datepicker-button"
 		type="button"
-		aria-label="<?php esc_attr_e( 'Click to toggle datepicker', 'the-events-calendar' ); ?>"
-		title="<?php esc_attr_e( 'Click to toggle datepicker', 'the-events-calendar' ); ?>"
+		name="<?php esc_attr( $picker_label ); ?>"
+		title="<?php esc_attr( $picker_label ); ?>"
 	>
 		<time
 			datetime="<?php echo esc_attr( $the_date->format( 'Y-m' ) ); ?>"

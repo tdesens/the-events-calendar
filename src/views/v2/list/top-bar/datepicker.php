@@ -25,14 +25,15 @@
  * @var string $datepicker_date            The datepicker selected date, in the `Y-m-d` format.
  */
 
+$picker_label = _x( 'Click to toggle datepicker and select date', 'Label used for the list view datepicker toggle button.', 'the-events-calendar' );
 ?>
 <div class="tribe-events-c-top-bar__datepicker">
 	<button
 		class="tribe-common-h3 tribe-common-h--alt tribe-events-c-top-bar__datepicker-button"
 		data-js="tribe-events-top-bar-datepicker-button"
 		type="button"
-		aria-label="<?php esc_attr_e( 'Click to toggle datepicker', 'the-events-calendar' ); ?>"
-		title="<?php esc_attr_e( 'Click to toggle datepicker', 'the-events-calendar' ); ?>"
+		name="<?php esc_attr( $picker_label ); ?>"
+		title="<?php esc_attr( $picker_label ); ?>"
 	>
 		<time
 			datetime="<?php echo esc_attr( $selected_start_datetime ); ?>"

@@ -26,14 +26,15 @@ $selected_datetime = strtotime( $selected_date_value );
 $selected_date_label = date_i18n( tribe_get_date_format( true ), $selected_datetime );
 
 $datepicker_date = Dates::build_date_object( $selected_date_value )->format( $date_formats->compact );
+$picker_label = _x( 'Click to toggle datepicker and select date', 'Label used for the day view datepicker toggle button.', 'the-events-calendar' );
 ?>
 <div class="tribe-events-c-top-bar__datepicker">
 	<button
 		class="tribe-common-h3 tribe-common-h--alt tribe-events-c-top-bar__datepicker-button"
 		data-js="tribe-events-top-bar-datepicker-button"
 		type="button"
-		aria-label="<?php esc_attr_e( 'Click to toggle datepicker', 'the-events-calendar' ); ?>"
-		title="<?php esc_attr_e( 'Click to toggle datepicker', 'the-events-calendar' ); ?>"
+		name="<?php esc_attr( $picker_label ); ?>"
+		title="<?php esc_attr( $picker_label ); ?>"
 	>
 		<time
 			datetime="<?php echo esc_attr( date( 'Y-m-d', $selected_datetime ) ); ?>"
