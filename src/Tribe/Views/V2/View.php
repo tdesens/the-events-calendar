@@ -756,11 +756,24 @@ class View implements View_Interface {
 	}
 
 	/**
+	 * Returns the view link label value after filtering.
+	 *
+	 * This is the method you want to overwrite to replace the label for a view with translations.
+	 *
+	 * @since TBD
+	 *
+	 * @return string
+	 */
+	public static function get_view_link_label(): string {
+		return static::filter_view_link_label( static::$label );
+	}
+
+	/**
 	 * Filters the view label value allowing changes to be made.
 	 *
 	 * @since 6.0.4
 	 *
-	 * @param string $label Which label we are filtering for.
+	 * @param string $label The label we are filtering.
 	 *
 	 * @return string
 	 */
@@ -788,6 +801,41 @@ class View implements View_Interface {
 		 * @param string $label Label of the Current view.
 		 */
 		return (string) apply_filters( "tec_events_views_v2_{$slug}_view_label", $label );
+	}
+
+	/**
+	 * Filters the view link label value allowing changes to be made.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $label The label we are filtering.
+	 *
+	 * @return string
+	 */
+	protected static function filter_view_link_label( string $label ): string {
+		/**
+		 * On the next feature version we need to remove.
+		 */
+		$slug = tribe( Manager::class )->get_view_slug_by_class( self::class );
+
+		/**
+		 * Filters the label that will be used on the UI for view links.
+		 *
+		 * @since 6.0.4
+		 *
+		 * @param string $label Link label of the Current view.
+		 * @param string $slug  Slug of the view we are getting the label for.
+		 */
+		$label = apply_filters( 'tec_events_views_v2_view_link_label', $label, $slug );
+
+		/**
+		 * Filters the label that will be used on the UI for a specific view link.
+		 *
+		 * @since 6.0.4
+		 *
+		 * @param string $label Link label of the Current view.
+		 */
+		return (string) apply_filters( "tec_events_views_v2_{$slug}_view_link_label", $label );
 	}
 
 	/**
@@ -990,6 +1038,13 @@ class View implements View_Interface {
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @since 4.9.3
+	 *
+	 * @param bool  $canonical Whether to return the canonical version of the URL or the normal one.
+	 * @param array $passthru_vars An array of query arguments that will be passed thru intact, and appended to the URL.
+	 *
+	 * @return string The URL associated to this View logical, next view or an empty string if no next View exists.setup_repository_args
 	 */
 	public function next_url( $canonical = false, array $passthru_vars = [] ) {
 		$cache_key = __METHOD__ . '_' . md5( wp_json_encode( func_get_args() ) );
@@ -1047,6 +1102,13 @@ class View implements View_Interface {
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @since 4.9.3
+	 *
+	 * @param bool  $canonical Whether to return the canonical version of the URL or the normal one.
+	 * @param array $passthru_vars An array of query arguments that will be passed thru intact, and appended to the URL.
+	 *
+	 * @return string The URL associated to this View logical, next view or an empty string if no previous View exists.
 	 */
 	public function prev_url( $canonical = false, array $passthru_vars = [] ) {
 		$cache_key = __METHOD__ . '_' . md5( wp_json_encode( func_get_args() ) );

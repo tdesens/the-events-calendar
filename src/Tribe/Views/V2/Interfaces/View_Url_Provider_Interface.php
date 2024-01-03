@@ -37,7 +37,7 @@ interface View_Url_Provider_Interface {
 	 *
 	 * @since 4.9.3
 	 *
-	 * @param bool $canonical Whether to return the canonical version of the URL or the normal one.
+	 * @param bool  $canonical Whether to return the canonical version of the URL or the normal one.
 	 * @param array $passthru_vars An array of query arguments that will be passed thru intact, and appended to the URL.
 	 *
 	 * @return string The URL associated to this View logical, next view or an empty string if no next View exists.
@@ -49,7 +49,7 @@ interface View_Url_Provider_Interface {
 	 *
 	 * @since 4.9.3
 	 *
-	 * @param bool $canonical Whether to return the canonical version of the URL or the normal one.
+	 * @param bool  $canonical Whether to return the canonical version of the URL or the normal one.
 	 * @param array $passthru_vars An array of query arguments that will be passed thru intact, and appended to the URL.
 	 *
 	 * @return string The URL associated to this View logical, next view or an empty string if no previous View exists.
