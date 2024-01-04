@@ -134,6 +134,7 @@ final class Global_Elements extends \Tribe__Customizer__Section {
 			'event_title_color'       => '#141827',
 			'event_date_time_color'   => '#141827',
 			'link_color'              => '#141827',
+			'main_color_theme'		  => 'light',
 			'background_color_choice' => 'transparent',
 			'background_color'        => '',
 			'accent_color'            => '#334aff',
@@ -173,6 +174,11 @@ final class Global_Elements extends \Tribe__Customizer__Section {
 			'link_color'              => [
 				'sanitize_callback'    => 'sanitize_hex_color',
 				'sanitize_js_callback' => 'maybe_hash_hex_color',
+				'transport'            => 'postMessage',
+			],
+			'main_color_theme'		  => [
+				'sanitize_callback'    => 'sanitize_key',
+				'sanitize_js_callback' => 'sanitize_key',
 				'transport'            => 'postMessage',
 			],
 			'background_color_choice' => [
@@ -328,8 +334,26 @@ final class Global_Elements extends \Tribe__Customizer__Section {
 					'the-events-calendar'
 				),
 			],
-			'background_color_choice' => [
+			'main_color_theme' => [
 				'priority'    => 25,
+				'type'        => 'radio',
+				'label'       => esc_html__( 'Main Color Theme', 'the-events-calendar' ),
+				'description' => esc_html__( 'All calendar and event pages', 'the-events-calendar' ),
+				'choices'     => [
+					'light' => esc_html_x(
+						'Light',
+						'Label for option to set the color theme to light (default).',
+						'the-events-calendar'
+					),
+					'dark'   => esc_html_x(
+						'Dark',
+						'Label for option to set the color theme to dark.',
+						'the-events-calendar'
+					),
+				],
+			],
+			'background_color_choice' => [
+				'priority'    => 26,
 				'type'        => 'radio',
 				'label'       => esc_html__( 'Background Color', 'the-events-calendar' ),
 				'description' => esc_html__( 'All calendar and event pages', 'the-events-calendar' ),
@@ -347,7 +371,7 @@ final class Global_Elements extends \Tribe__Customizer__Section {
 				],
 			],
 			'background_color'        => [
-				'priority'  => 26, // Should come right after background_color_choice
+				'priority'  => 27, // Should come right after background_color_choice
 				'type'      => 'color',
 			],
 			'accent_color'            => [

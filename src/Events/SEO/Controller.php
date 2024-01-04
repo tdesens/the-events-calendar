@@ -194,7 +194,7 @@ class Controller extends Controller_Contract {
 	}
 
 	/**
-	 * Determine if a nonindex should be added for list based views that don't have events.
+	 * Determine if a noindex should be added for list based views that don't have events.
 	 *
 	 * @since 6.2.6
 	 *
