@@ -66,11 +66,11 @@ final class Tribe__Events__Customizer__General_Theme extends Tribe__Customizer__
 			$background_color_obj = new Tribe__Utils__Color( $settings['button_bg'] );
 			$button_bg_rgb = $background_color_obj->getRgb();
 
-			$settings['button_bg_hex_red'] = $button_bg_rgb['R'];
+			$settings['button_bg_hex_red']   = $button_bg_rgb['R'];
 			$settings['button_bg_hex_green'] = $button_bg_rgb['G'];
-			$settings['button_bg_hex_blue'] = $button_bg_rgb['B'];
-			$settings['button_bg_hover'] = '#' . $background_color_obj->darken( 15 );
-			$settings['button_color_hover'] = '#' . $background_color_obj->darken( 30 );
+			$settings['button_bg_hex_blue']  = $button_bg_rgb['B'];
+			$settings['button_bg_hover']     = '#' . $background_color_obj->darken( 15 );
+			$settings['button_color_hover']  = '#' . $background_color_obj->darken( 30 );
 
 			if ( $background_color_obj->isLight() ) {
 				$settings['button_color'] = '#' . $background_color_obj->darken( 60 );

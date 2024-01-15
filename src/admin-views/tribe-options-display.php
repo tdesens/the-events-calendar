@@ -1,5 +1,6 @@
 <?php
 use \Tribe\Events\Views\V2\Manager;
+use Tribe__Events__Customizer__General_Theme as Customizer_General;
 
 $tec = Tribe__Events__Main::instance();
 $tcmn = Tribe__Main::instance();
@@ -142,6 +143,13 @@ $tec_events_display_template = [
 						. '</p>',
 		],
 		'validation_type' => 'options',
+	],
+	'dark_mode'                 => [
+		'type'            => 'checkbox_bool',
+		'label'           => __( 'Dark mode', 'the-events-calendar' ),
+		'tooltip'         => __( 'Enable dark mode for the calendar.', 'the-events-calendar' ),
+		'default'         => false,
+		'validation_type' => 'boolean',
 	],
 	'tribeEventsTemplate'           => [
 		'type'            => 'dropdown',
