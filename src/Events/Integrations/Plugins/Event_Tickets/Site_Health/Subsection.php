@@ -64,18 +64,28 @@ class Subsection extends Abstract_Info_Subsection {
 	/**
 	 * Counts the number of ticketed events.
 	 *
+	 * @since TBD Added additional check to confirm providers are enabled.
+	 *
 	 * @return int Count of ticketed events.
 	 */
 	private function get_number_of_ticketed_events(): int {
+		if ( ! $this->are_ticketed_providers_enabled() ) {
+			return 0;
+		}
 		return tribe( 'tickets.event-repository' )->per_page( -1 )->where( 'has_tickets' )->count();
 	}
 
 	/**
 	 * Counts the number of ticketed events happening now.
 	 *
+	 * @since TBD Added additional check to confirm providers are enabled.
+	 *
 	 * @return int Count of ticketed events currently happening.
 	 */
 	private function get_number_of_ticketed_events_happening_now(): int {
+		if ( ! $this->are_ticketed_providers_enabled() ) {
+			return 0;
+		}
 		return tribe( 'tickets.event-repository' )->where(
 			'ends_after',
 			'now'
@@ -85,9 +95,15 @@ class Subsection extends Abstract_Info_Subsection {
 	/**
 	 * Calculates the average number of attendees per event.
 	 *
+	 * @since TBD Added additional check to confirm providers are enabled.
+	 *
 	 * @return int Average number of attendees per event.
 	 */
 	private function get_average_attendees_per_event(): int {
+		if ( ! $this->are_ticketed_providers_enabled() ) {
+			return 0;
+		}
+
 		$attendee_count       = (int) tribe( 'tickets.attendee-repository' )->count();
 		$ticketed_event_count = (int) tribe( 'tickets.event-repository' )->per_page( -1 )->where(
 			'has_tickets'
