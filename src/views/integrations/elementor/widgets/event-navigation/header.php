@@ -10,7 +10,6 @@
  * @var bool   $show_nav_header Whether to visually show/hide the event navigation header.
  * @var string $header_tag      The HTML tag for the event title.
  * @var string $header_text     The header_text for the event navigation.
- * @var int    $event_id        The event ID.
  * @var Tribe\Events\Integrations\Elementor\Widgets\Event_Navigation $widget The widget instance.
  */
 

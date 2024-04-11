@@ -65,7 +65,6 @@ class Event_Title extends Abstract_Widget {
 		$title    = $event_id ? get_the_title( $event_id ) : get_the_title();
 
 		return [
-			'event_id'   => $event_id,
 			'header_tag' => $this->get_event_title_header_tag(),
 			'title'      => $title,
 		];

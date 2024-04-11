@@ -12,8 +12,6 @@
  * @var string $header_tag   The HTML tag to use for the phone header.
  * @var string $header_text  The phone header text.
  * @var string $venue_id     The venue ID.
- * @var array  $settings     The widget settings.
- * @var int    $event_id     The event ID.
  * @var Tribe\Events\Integrations\Elementor\Widgets\Event_Venue $widget The widget instance.
  */
 

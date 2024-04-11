@@ -72,7 +72,6 @@ class Event_Navigation extends Abstract_Widget {
 			'prev_link'       => tribe_get_event_link( $prev_event ),
 			'next_event'      => $next_event,
 			'next_link'       => tribe_get_event_link( $next_event ),
-			'event_id'        => $this->get_event_id(),
 		];
 	}
 
@@ -97,7 +96,6 @@ class Event_Navigation extends Abstract_Widget {
 			'prev_link'       => '#',
 			'next_event'      => $next_event,
 			'next_link'       => '#',
-			'event_id'        => $this->get_event_id(),
 		];
 	}
 

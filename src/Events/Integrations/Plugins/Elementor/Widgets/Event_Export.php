@@ -67,8 +67,6 @@ class Event_Export extends Abstract_Widget {
 	protected function template_args(): array {
 		$settings = $this->get_settings_for_display();
 		$args     = [
-			'settings' => $settings,
-			'event_id' => $this->get_event_id(),
 			'show'     => false,
 		];
 
@@ -105,8 +103,7 @@ class Event_Export extends Abstract_Widget {
 	protected function preview_args(): array {
 		$settings = $this->get_settings_for_display();
 		$args     = [
-			'event_id' => $this->get_event_id(),
-			'show'     => true,
+			'show' => true,
 		];
 
 		if ( tribe_is_truthy( $settings['show_gcal_link'] ?? true ) ) {

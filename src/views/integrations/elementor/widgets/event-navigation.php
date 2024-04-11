@@ -15,7 +15,6 @@
  * @var string           $prev_link  The HTML previous link.
  * @var ?WP_Post         $next_event The next event.
  * @var string           $next_link  The HTML next link.
- * @var int              $event_id   The event ID.
  * @var Event_Navigation $widget     The widget instance.
  */
 

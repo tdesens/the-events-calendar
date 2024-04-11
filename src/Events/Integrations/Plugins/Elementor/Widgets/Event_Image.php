@@ -80,10 +80,7 @@ class Event_Image extends Abstract_Widget {
 			$atts
 		);
 
-		return [
-			'image'    => $image,
-			'event_id' => $event_id,
-		];
+		return [ 'image' => $image ];
 	}
 
 	/**

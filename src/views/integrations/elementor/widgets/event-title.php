@@ -8,7 +8,6 @@
  * @since TBD
  *
  * @var string      $header_tag The HTML tag for the event title.
- * @var int         $event_id   The event ID.
  * @var string      $title      The event title.
  * @var Event_Title $widget     The widget instance.
  */

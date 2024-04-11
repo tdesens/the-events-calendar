@@ -11,8 +11,6 @@
  * @var bool   $link_name     Whether to link the organizer name.
  * @var bool   $multiple      Whether there are multiple organizers.
  * @var string $organizer     The organizer ID.
- * @var array  $settings      The widget settings.
- * @var int    $event_id      The event ID.
  * @var Tribe\Events\Integrations\Elementor\Widgets\Event_Organizer $widget The widget instance.
  */
 

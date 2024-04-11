@@ -10,8 +10,6 @@
  * @var bool   $show     Whether to show the venue name.
  * @var bool   $link     Whether to link the venue name.
  * @var string $venue_id The venue ID.
- * @var array  $settings The widget settings.
- * @var int    $event_id The event ID.
  * @var Tribe\Events\Integrations\Elementor\Widgets\Event_Venue $widget The widget instance.
  */
 

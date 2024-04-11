@@ -92,8 +92,6 @@ class Event_Organizer extends Abstract_Widget {
 			'organizer_phone_header_text'   => $this->get_phone_header_text(),
 			'organizer_website_header_text' => $this->get_website_header_text(),
 			'multiple'                      => $this->has_multiple_organizers(),
-			'settings'                      => $settings,
-			'event_id'                      => $event_id,
 			'organizers'                    => $this->get_organizer_data(),
 		];
 	}

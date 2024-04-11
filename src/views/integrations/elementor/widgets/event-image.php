@@ -8,7 +8,6 @@
  * @since TBD
  *
  * @var string      $image    The image attachment HTML.
- * @var int         $event_id The event ID.
  * @var Event_Image $widget   The widget instance.
  */
 

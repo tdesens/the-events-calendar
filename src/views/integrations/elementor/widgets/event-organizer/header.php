@@ -9,8 +9,6 @@
  *
  * @var bool  $show          Whether to show the organizer header.
  * @var bool  $multiple      Whether there are multiple organizers.
- * @var array $settings      The widget settings.
- * @var int   $event_id      The event ID.
  * @var Tribe\Events\Integrations\Elementor\Widgets\Event_Organizer $widget The widget instance.
  */
 

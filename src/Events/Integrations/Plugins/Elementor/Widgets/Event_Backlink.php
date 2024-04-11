@@ -60,8 +60,6 @@ class Event_Backlink extends Abstract_Widget {
 	 * @return array The template args.
 	 */
 	protected function template_args(): array {
-		$event_id = $this->get_event_id();
-
 		return [
 			'backlink_class' => $this->get_link_class(),
 			'backlink_tag'   => $this->get_backlink_tag(),

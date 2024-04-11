@@ -11,7 +11,6 @@
  * @var string        $show_website_header  Whether to show the header.
  * @var string        $header_tag           The HTML tag for the header.
  * @var string        $header_class         The class for the link header.
- * @var int           $event_id             The event ID.
  * @var string        $link_class           The class for the link.
  * @var string        $website              The event website link.
  * @var Event_Website $widget               The widget instance.

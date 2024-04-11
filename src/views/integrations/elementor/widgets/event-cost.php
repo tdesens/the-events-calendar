@@ -8,7 +8,6 @@
  * @since TBD
  *
  * @var string     $html_tag The HTML tag for the event cost.
- * @var int        $event_id   The event ID.
  * @var string     $cost       The event cost.
  * @var Event_Cost $widget     The widget instance.
  */

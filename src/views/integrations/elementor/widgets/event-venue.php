@@ -36,8 +36,6 @@
  * @var string      $website_header_text   The website header text.
  *
  * Misc.
- * @var int         $event_id              The event ID.
- * @var array       $settings              The widget settings.
  * @var array       $venues                The venue data arrays.
  * @var Event_Venue $widget                The widget instance.
  */

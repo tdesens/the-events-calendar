@@ -24,8 +24,6 @@
  * @var string $phone_header_text The text for the phone header.
  * @var string $website_header_text The text for the website header.
  * @var array  $organizer_ids The organizer IDs.
- * @var int    $event_id The event ID.
- * @var array  $settings The widget settings.
  * @var Tribe\Events\Integrations\Elementor\Widgets\Event_Organizer $widget The widget instance.
  */
 

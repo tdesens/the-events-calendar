@@ -8,13 +8,11 @@
  * @since TBD
  *
  * Guaranteed variables:
- * @var array        $settings               The widget settings.
  * @var bool         $show                   Whether to show the widget.
  * @var bool         $show_gcal_link         Whether to show the Google Calendar link.
  * @var bool         $show_ical_link         Whether to show the iCalendar link.
  * @var bool         $show_outlook_365_link  Whether to show the Outlook 365 link.
  * @var bool         $show_outlook_live_link Whether to show the Outlook Live link.
- * @var int          $event_id               The event ID.
  * @var Event_Export $widget                 The widget instance.
  *
  * Additional optional variables based on user-input.

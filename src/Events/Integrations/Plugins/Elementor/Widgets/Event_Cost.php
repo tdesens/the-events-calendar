@@ -59,7 +59,6 @@ class Event_Cost extends Abstract_Widget {
 			'show_header' => tribe_is_truthy( $settings['show_header'] ?? false ),
 			'header_tag'  => $this->get_header_tag(),
 			'html_tag'    => $this->get_html_tag(),
-			'event_id'    => $event_id,
 			'cost'        => tribe_get_formatted_cost( $event_id ),
 		];
 	}

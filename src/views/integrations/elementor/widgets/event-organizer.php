@@ -26,8 +26,6 @@
  * @var string          $website_header_text The text for the website header.
  * @var string          $website_header_tag  The website header tag.
  * @var array           $organizers          The organizer data arrays.
- * @var int             $event_id            The event ID.
- * @var array           $settings            The widget settings.
  * @var Event_Organizer $widget              The widget instance.
  */
 

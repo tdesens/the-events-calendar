@@ -11,8 +11,6 @@
  * @var string     $header_tag       The HTML tag for the header.
  * @var string     $label_text       The label text.
  * @var array      $tags             The event tags.
- * @var array      $settings         The widget settings.
- * @var int        $event_id         The event ID.
  * @var Event_Tags $widget           The widget instance.
  */
 

@@ -14,7 +14,6 @@
  *                                       'class' => array,
  *                                   ]
  * @var bool         $should_display Whether to show the widget.
- * @var int          $event_id       The event ID.
  * @var Event_Export $widget         The widget instance.
  */
 

@@ -69,8 +69,6 @@ class Event_Categories extends Abstract_Widget {
 			'header_tag'  => $settings['categories_header_tag'] ?? 'h3',
 			'header_text' => $this->get_header_text(),
 			'categories'  => $this->do_categories(),
-			'settings'    => $settings,
-			'event_id'    => $event_id,
 		];
 	}
 

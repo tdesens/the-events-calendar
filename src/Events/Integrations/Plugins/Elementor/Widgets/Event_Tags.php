@@ -79,8 +79,6 @@ class Event_Tags extends Abstract_Widget {
 			'header_tag'       => $settings['header_tag'] ?? 'h3',
 			'tags'             => $tags,
 			'label_text'       => $this->get_header_text(),
-			'event_id'         => $event_id,
-			'settings'         => $settings,
 		];
 	}
 

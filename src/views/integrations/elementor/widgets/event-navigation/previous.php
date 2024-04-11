@@ -9,7 +9,6 @@
  *
  * @var string   $prev_link  The URl to the previous event.
  * @var ?WP_Post $prev_event The previous event.
- * @var int      $event_id   The event ID.
  * @var Tribe\Events\Integrations\Elementor\Widgets\Event_Navigation $widget The widget instance.
  */
 

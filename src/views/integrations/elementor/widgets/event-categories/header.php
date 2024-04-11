@@ -10,8 +10,6 @@
  * @var bool             $show_header Whether to show the header.
  * @var string           $header_tag  The HTML tag to use for the header.
  * @var string           $header_text The header text.
- * @var array            $settings    The widget settings.
- * @var int              $event_id    The event ID.
  * @var Event_Categories $widget      The widget instance.
  */
 

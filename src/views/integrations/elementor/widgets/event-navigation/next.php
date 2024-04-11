@@ -9,7 +9,6 @@
  *
  * @var string   $next_link  The URl to the next event.
  * @var ?WP_Post $next_event The next event.
- * @var int      $event_id   The event ID.
  * @var Tribe\Events\Integrations\Elementor\Widgets\Event_Navigation $widget The widget instance.
  */
 

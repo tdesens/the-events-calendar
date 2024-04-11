@@ -13,7 +13,6 @@
  *                                 'link'  => string,
  *                                 'class' => array,
  *                             ]
- * @var int          $event_id The event ID.
  * @var Event_Export $widget   The widget instance.
  */
 
