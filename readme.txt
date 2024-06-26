@@ -232,9 +232,10 @@ Remember to always make a backup of your database and files before updating!
 
 == Changelog ==
 
-= [6.5.1.5] TBD =
+= [6.5.1.5] 2024-06-27 =
 
 * Security - Added additional security check when an ignored event is restored. [SVUL-3]
+* Language - 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
 
 = [6.5.1.4] 2024-06-18 =
 
